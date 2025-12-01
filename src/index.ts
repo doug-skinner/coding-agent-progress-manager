@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { addCommand } from './commands/add.js';
 import { initCommand } from './commands/init.js';
+import { listCommand } from './commands/list.js';
 import { updateCommand } from './commands/update.js';
 
 // Get package version for CLI
@@ -50,8 +51,16 @@ program
     await updateCommand(id, status, notes);
   });
 
+// List command
+program
+  .command('list')
+  .description('List all requirements with their status')
+  .action(async () => {
+    await listCommand();
+  });
+
 // Command placeholders - will be implemented in subsequent requirements
-// TODO: Add commands: list, show, delete, complete, block, prompt
+// TODO: Add commands: show, delete, complete, block, prompt
 
 // Parse command-line arguments
 program.parse(process.argv);
