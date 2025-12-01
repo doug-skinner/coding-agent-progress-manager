@@ -13,6 +13,9 @@ You are **ABSOLUTELY FORBIDDEN** from working on multiple requirements in parall
 ### **RULE 3: CLI-ONLY UPDATES**
 You MUST use the CLI commands (cap-manager) to update progress.json. You are FORBIDDEN from directly editing the progress.json file.
 
+### **RULE 4: Date/Time**
+You MUST use bash available date tools to find the current date and time before updating the created at or updated at timestamps.
+
 ---
 
 ## 1. STARTUP PROCEDURE
