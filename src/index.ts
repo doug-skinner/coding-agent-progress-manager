@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { addCommand } from './commands/add.js';
+import { blockCommand } from './commands/block.js';
 import { completeCommand } from './commands/complete.js';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
@@ -80,8 +81,18 @@ program
     await completeCommand(id, notes);
   });
 
+// Block command
+program
+  .command('block')
+  .description('Mark a requirement as blocked with a required reason')
+  .argument('<id>', 'ID of the requirement to block', Number.parseInt)
+  .argument('<reason>', 'Reason why the requirement is blocked')
+  .action(async (id: number, reason: string) => {
+    await blockCommand(id, reason);
+  });
+
 // Command placeholders - will be implemented in subsequent requirements
-// TODO: Add commands: delete, block, prompt
+// TODO: Add commands: delete, prompt
 
 // Parse command-line arguments
 program.parse(process.argv);
