@@ -277,5 +277,14 @@
     "notes": "",
     "created": "2025-12-01T20:45:00.000Z",
     "updated": "2025-12-01T20:45:00.000Z"
+  },
+  {
+    "id": 32,
+    "title": "Update agent prompt for continuous loop execution",
+    "description": "Modify agent_prompt.txt to instruct the coding agent to run in a continuous loop until all requirements are either 'Blocked' or 'Completed'. Add loop-back logic after completion, termination checks at startup and after completion, summary output when all done, and explicit stop on blockers. Update 7 sections and add new Section 6.5 for comprehensive loop behavior documentation.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T21:00:00.000Z",
+    "updated": "2025-12-01T21:00:00.000Z"
   }
 ]
