@@ -36,5 +36,3 @@ The `progress.json` file contains an array of requirement objects, each with the
 ```
 
 The `status` field can be one of: "Not Started", "In Progress", "Completed", or "Blocked".
-
-
