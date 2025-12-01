@@ -4,6 +4,7 @@ import { Command } from 'commander';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { addCommand } from './commands/add.js';
+import { completeCommand } from './commands/complete.js';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
 import { showCommand } from './commands/show.js';
@@ -69,8 +70,18 @@ program
     await showCommand(id);
   });
 
+// Complete command
+program
+  .command('complete')
+  .description('Mark a requirement as completed')
+  .argument('<id>', 'ID of the requirement to complete', Number.parseInt)
+  .argument('[notes]', 'Optional completion notes')
+  .action(async (id: number, notes?: string) => {
+    await completeCommand(id, notes);
+  });
+
 // Command placeholders - will be implemented in subsequent requirements
-// TODO: Add commands: delete, complete, block, prompt
+// TODO: Add commands: delete, block, prompt
 
 // Parse command-line arguments
 program.parse(process.argv);
