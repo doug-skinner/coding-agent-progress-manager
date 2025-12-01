@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { addCommand } from './commands/add.js';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
+import { showCommand } from './commands/show.js';
 import { updateCommand } from './commands/update.js';
 
 // Get package version for CLI
@@ -59,8 +60,17 @@ program
     await listCommand();
   });
 
+// Show command
+program
+  .command('show')
+  .description('Display detailed information for a single requirement')
+  .argument('<id>', 'ID of the requirement to show', Number.parseInt)
+  .action(async (id: number) => {
+    await showCommand(id);
+  });
+
 // Command placeholders - will be implemented in subsequent requirements
-// TODO: Add commands: show, delete, complete, block, prompt
+// TODO: Add commands: delete, complete, block, prompt
 
 // Parse command-line arguments
 program.parse(process.argv);
