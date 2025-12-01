@@ -6,6 +6,7 @@ import { join } from 'node:path';
 import { addCommand } from './commands/add.js';
 import { blockCommand } from './commands/block.js';
 import { completeCommand } from './commands/complete.js';
+import { deleteCommand } from './commands/delete.js';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
 import { showCommand } from './commands/show.js';
@@ -91,8 +92,18 @@ program
     await blockCommand(id, reason);
   });
 
+// Delete command
+program
+  .command('delete')
+  .description('Delete a requirement by ID')
+  .argument('<id>', 'ID of the requirement to delete', Number.parseInt)
+  .option('-f, --force', 'Skip confirmation prompt')
+  .action(async (id: number, options: { force?: boolean }) => {
+    await deleteCommand(id, options.force);
+  });
+
 // Command placeholders - will be implemented in subsequent requirements
-// TODO: Add commands: delete, prompt
+// TODO: Add commands: prompt
 
 // Parse command-line arguments
 program.parse(process.argv);
