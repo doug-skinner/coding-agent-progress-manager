@@ -1,0 +1,563 @@
+# Coding Agent Instructions for Progress Tracking System
+
+## ⚠️ CRITICAL RULES - READ FIRST
+
+### **RULE 1: ONE REQUIREMENT AT A TIME - ABSOLUTELY FORBIDDEN TO VIOLATE**
+You are **ABSOLUTELY FORBIDDEN** from working on multiple requirements in parallel. You MUST complete one requirement entirely before starting another. This is not a suggestion - it is a hard constraint.
+
+### **RULE 2: MANDATORY STATUS TRANSITIONS**
+- You MUST update status from "Not Started" → "In Progress" BEFORE starting ANY work on a requirement
+- You MUST update status to "Completed" BEFORE moving to the next requirement
+- These transitions are REQUIRED, not optional
+
+### **RULE 3: CLI-ONLY UPDATES**
+You MUST use the CLI commands (npm run progress) to update progress.json. You are FORBIDDEN from directly editing the progress.json file.
+
+---
+
+## 1. STARTUP PROCEDURE
+
+### Every Conversation Start
+At the beginning of EVERY conversation, you MUST:
+
+1. **Read progress.json immediately**
+   ```bash
+   cat progress.json
+   ```
+
+2. **Validate the file**
+   - Confirm it exists and is valid JSON
+   - If missing or corrupted, see "Edge Case Handling" section below
+
+3. **Check for existing "In Progress" requirements**
+   - If ANY requirement has status "In Progress", that is your active work
+   - You MUST continue that requirement before starting anything else
+   - If multiple are "In Progress", see "Edge Case Handling" section
+
+4. **Read ALL requirements**
+   - Do not skip this step
+   - You need full context to make priority decisions
+
+---
+
+## 2. REQUIREMENT SELECTION WORKFLOW
+
+### Priority Determination Algorithm
+
+When selecting the next requirement to work on, follow this algorithm:
+
+1. **Check for "In Progress" status (HIGHEST PRIORITY)**
+   - If ANY requirement has status "In Progress", work on that one
+   - This takes absolute precedence over everything else
+
+2. **If no "In Progress" requirements exist, evaluate all "Not Started" requirements:**
+   - Read EVERY "Not Started" requirement completely
+   - Consider dependencies (does one requirement mention needing another first?)
+   - Consider logical ordering (infrastructure before features, etc.)
+   - Prefer lower ID numbers when all else is equal
+
+3. **Make your determination:**
+   - Choose the highest priority requirement based on above factors
+   - If unclear which to prioritize, you MUST ask the user: "I see requirements #X, #Y, and #Z are not started. Which should I work on first?"
+
+4. **Never select "Blocked" requirements**
+   - These require user intervention first
+   - If all remaining requirements are "Blocked", notify the user
+
+### Decision Tree
+```
+Start
+  ↓
+Is there a requirement with "In Progress" status?
+  YES → Work on that requirement (even if interrupted previously)
+  NO → Continue
+  ↓
+Are there any "Not Started" requirements?
+  YES → Continue to priority evaluation
+  NO → Check for "Blocked" requirements or report completion
+  ↓
+Read ALL "Not Started" requirements
+  ↓
+Can you determine highest priority based on:
+  - Dependencies mentioned in descriptions?
+  - Logical ordering?
+  - Lower ID numbers?
+  YES → Select that requirement
+  NO → ASK USER which to work on
+```
+
+---
+
+## 3. PRE-WORK VALIDATION CHECKLIST
+
+Before starting work on ANY requirement, you MUST complete this checklist:
+
+### Validation Steps:
+
+1. **Verify no other "In Progress" items**
+   ```bash
+   npm run progress -- list
+   ```
+   - Confirm only ONE or ZERO requirements show "In Progress"
+   - If multiple exist, see "Edge Case Handling" section
+
+2. **Verify requirement has sufficient detail**
+   - Does the title make sense?
+   - Is the description clear and actionable?
+   - Do you understand what "done" looks like?
+   - If NOT: You MUST ask user to clarify the requirement
+   - If the requirement appears to contain multiple sub-tasks: You MUST ABORT and ask user to break it down into separate requirements
+
+3. **Confirm clean git state**
+   ```bash
+   git status
+   ```
+   - No uncommitted changes from previous work
+   - If uncommitted changes exist, commit them first with appropriate message
+
+4. **Update status to "In Progress"**
+   ```bash
+   npm run progress -- update <id> "In Progress" "Starting work on this requirement"
+   ```
+   - This marks the beginning of your work
+   - The notes should indicate you're beginning
+
+### Only After ALL Validations Pass
+You may now begin actual work on the requirement.
+
+---
+
+## 4. WORK EXECUTION GUIDELINES
+
+### Breaking Down Work
+
+- Work through the requirement methodically
+- If you discover the requirement is actually multiple separate tasks: STOP immediately and ask the user to break it into separate requirements
+- Make incremental progress toward the requirement's completion
+
+### Committing Your Work
+
+**CRITICAL: Commit after each "logical unit"**
+
+A "logical unit" is defined as: **when a feature works, even if it represents only partial progress on the requirement**
+
+Examples of logical units:
+- A new function is implemented and tested
+- A configuration file is created and working
+- A bug is fixed and verified
+- A refactor is complete and code still works
+- A file structure is set up correctly
+
+**Commit Message Format (REQUIRED):**
+```
+Req #<ID>: <descriptive message>
+```
+
+Examples:
+```
+Req #5: Implement file reading utility function
+Req #5: Add error handling for missing files
+Req #5: Complete file I/O utilities implementation
+Req #12: Create initial agent_prompt.txt structure
+Req #12: Add startup procedure section
+```
+
+Every commit message MUST start with "Req #" followed by the requirement ID.
+
+### Updating Notes During Work
+
+Use the notes field to document:
+- Progress updates ("Implemented X, now working on Y")
+- Technical decisions ("Chose approach A because B")
+- Blockers encountered ("Cannot proceed until user provides Z")
+- Issues discovered ("Found bug in existing code related to this work")
+
+Update notes when:
+- You make significant progress
+- You make an important technical decision
+- You encounter an issue or blocker
+- You complete a major milestone
+
+Example:
+```bash
+npm run progress -- update 5 "In Progress" "Implemented file reading function, now working on write functionality"
+```
+
+### Repository State Philosophy
+
+Keep the repository ALWAYS in a good, working state:
+- Commit working code frequently
+- Don't leave broken code uncommitted
+- Each commit should represent a stable checkpoint
+- Tests should pass at each commit (if tests exist and requirement mentions them)
+
+---
+
+## 5. COMPLETION PROCEDURE
+
+When you believe you have completed a requirement, follow this procedure:
+
+### Pre-Completion Validation
+
+1. **Review the original requirement**
+   - Have you fulfilled the title?
+   - Have you addressed everything in the description?
+   - If the requirement mentions testing, have you run tests?
+
+2. **Verify working state**
+   - Does your implementation actually work?
+   - Have you tested the key functionality?
+   - Are there any obvious issues?
+
+3. **Commit any final changes**
+   ```bash
+   git add .
+   git commit -m "Req #<ID>: Final implementation of <description>"
+   ```
+
+### Mark as Completed
+
+Only after validation passes:
+
+```bash
+npm run progress -- update <id> "Completed" "Completed implementation: <brief summary of what was done>"
+```
+
+Example:
+```bash
+npm run progress -- update 12 "Completed" "Completed implementation: Created comprehensive agent_prompt.txt with 10 sections covering workflow, validation, edge cases, and examples"
+```
+
+### Final Commit
+
+Commit the progress.json update:
+```bash
+git add progress.json
+git commit -m "Req #<ID>: Mark requirement as completed"
+```
+
+---
+
+## 6. BLOCKER HANDLING
+
+### When to Mark as "Blocked"
+
+Mark a requirement as "Blocked" when:
+- You cannot proceed without information from the user
+- You discover a dependency that must be completed first
+- You encounter a technical limitation that prevents completion
+- External factors prevent you from continuing
+
+### Required Actions When Blocking
+
+1. **Document the blocker thoroughly in notes:**
+   ```bash
+   npm run progress -- update <id> "Blocked" "Cannot proceed: <detailed explanation of what is blocking you and what is needed to unblock>"
+   ```
+
+   Example:
+   ```bash
+   npm run progress -- update 8 "Blocked" "Cannot proceed: Need user to provide API credentials for external service integration. Specifically need: API key, secret, and endpoint URL"
+   ```
+
+2. **Commit the status change:**
+   ```bash
+   git add progress.json
+   git commit -m "Req #<ID>: Blocked - <brief blocker description>"
+   ```
+
+3. **Immediately ask the user for guidance:**
+   - Explain what you were trying to do
+   - Explain exactly what is blocking you
+   - Explain what you need to proceed
+   - Do NOT move to another requirement without user direction
+
+---
+
+## 7. CLI COMMAND REFERENCE
+
+### Finding Available Commands
+
+If you're unsure about CLI syntax:
+```bash
+npm run progress -- --help
+```
+
+This will show you all available commands and their usage.
+
+### Common Commands
+
+**List all requirements:**
+```bash
+npm run progress -- list
+```
+
+**Show detailed info for one requirement:**
+```bash
+npm run progress -- show <id>
+```
+
+**Update a requirement:**
+```bash
+npm run progress -- update <id> "<new-status>" "<notes>"
+```
+
+**Add a new requirement (if user requests it):**
+```bash
+npm run progress -- add "<title>" "<description>"
+```
+
+### Status Values
+
+Only these four values are allowed:
+- "Not Started"
+- "In Progress"
+- "Completed"
+- "Blocked"
+
+Any other value will cause an error.
+
+---
+
+## 8. EDGE CASE HANDLING
+
+### Missing or Corrupted progress.json
+
+**Scenario:** progress.json doesn't exist or contains invalid JSON
+
+**Actions:**
+1. Alert the user immediately: "The progress.json file is missing/corrupted. I cannot proceed without it."
+2. Ask user: "Would you like me to help you create a new progress.json file, or do you need to restore it from backup?"
+3. Do NOT attempt to create or fix it yourself without user guidance
+4. Do NOT proceed with any other work
+
+### Multiple Requirements Marked "In Progress"
+
+**Scenario:** You find 2+ requirements with "In Progress" status
+
+**Actions:**
+1. Alert the user: "I found multiple requirements marked as 'In Progress': #X, #Y, and #Z. This violates the one-at-a-time rule."
+2. Ask user: "Which requirement should I focus on? I'll help update the others to the appropriate status."
+3. Wait for user guidance before proceeding
+4. Once user selects one, help update the others to either "Not Started" or "Blocked" as appropriate
+
+### Unclear or Incomplete Requirement Description
+
+**Scenario:** A requirement's description is vague, unclear, or seems incomplete
+
+**Actions:**
+1. Do NOT guess or assume what is meant
+2. Alert the user: "Requirement #X description is unclear to me. Specifically: <what is unclear>"
+3. Ask clarifying questions: "Could you clarify: <specific questions>?"
+4. If user wants you to update the requirement description, use:
+   ```bash
+   npm run progress -- update <id> "Not Started" "<user's clarified description>"
+   ```
+5. Only proceed once you have clarity
+
+### Interrupted Work on a Requirement
+
+**Scenario:** You start a conversation and find a requirement marked "In Progress" but you don't have context about what was done
+
+**Actions:**
+1. Read the notes field for context on what was already done
+2. Check git history for recent commits related to this requirement:
+   ```bash
+   git log --oneline --grep="Req #<ID>"
+   ```
+3. Review the code changes to understand current state
+4. Ask user if needed: "I see requirement #X is in progress. The notes say: <notes>. Should I continue this work or would you like to discuss the current state first?"
+5. Continue the work where it left off, or adjust based on user guidance
+
+### External Links (Ignore Until Feature Implemented)
+
+**Scenario:** You see an "externalLink" field in a requirement
+
+**Actions:**
+Currently, ignore this field. The external link integration feature is not yet implemented. Focus only on the id, title, description, status, notes, created, and updated fields.
+
+### Testing
+
+**Scenario:** Should you run tests when completing a requirement?
+
+**Actions:**
+- Only run tests if the requirement EXPLICITLY mentions testing
+- If requirement says "add tests", you must add tests
+- If requirement says "ensure tests pass", you must run tests and verify
+- If requirement doesn't mention tests, you are NOT required to run them
+- When in doubt, ask the user
+
+---
+
+## 9. COMPLETE WORKFLOW EXAMPLE
+
+Here's a complete example of working on a requirement from start to finish:
+
+### Starting Conversation
+```
+Agent: Let me read progress.json to see what I should work on.
+[reads progress.json]
+
+Agent: I see requirement #5 "Implement file I/O utilities" is marked "Not Started".
+All other requirements are either completed or have higher IDs. I'll work on requirement #5.
+
+Agent: Let me verify no other requirements are "In Progress"...
+[checks list - confirms none in progress]
+
+Agent: The requirement description is clear. Let me check git status...
+[checks git status - clean]
+
+Agent: Now I'll update requirement #5 to "In Progress" before starting work:
+[runs: npm run progress -- update 5 "In Progress" "Starting work on file I/O utilities"]
+
+Agent: [commits the progress.json change]
+git commit -m "Req #5: Mark as in progress"
+```
+
+### During Work
+```
+Agent: [implements readFile function]
+Agent: [commits]
+git commit -m "Req #5: Implement file reading utility function"
+
+Agent: [updates progress notes]
+npm run progress -- update 5 "In Progress" "Implemented readFile function, now working on writeFile function"
+git commit -m "Req #5: Update progress notes"
+
+Agent: [implements writeFile function]
+Agent: [tests that both functions work]
+Agent: [commits]
+git commit -m "Req #5: Implement file writing utility function"
+
+Agent: [adds error handling]
+Agent: [commits]
+git commit -m "Req #5: Add error handling for file operations"
+```
+
+### Completing Work
+```
+Agent: I've completed all aspects of requirement #5:
+- ✓ Implemented readFile utility
+- ✓ Implemented writeFile utility
+- ✓ Added error handling for missing files, parsing errors, and write failures
+- ✓ Handled JSON serialization with proper formatting
+
+Agent: Let me mark this requirement as completed:
+npm run progress -- update 5 "Completed" "Completed implementation: Created utility functions to read and write progress.json safely, including error handling for missing files, parsing errors, and write failures. Handle JSON serialization with proper formatting."
+
+Agent: [commits]
+git commit -m "Req #5: Mark requirement as completed"
+
+Agent: Requirement #5 is now complete. Ready to work on the next requirement when you're ready.
+```
+
+### Example: Hitting a Blocker
+```
+Agent: [starts working on requirement #8]
+Agent: I need to integrate with an external API, but I don't see any API credentials in the codebase.
+
+Agent: I cannot proceed without these credentials. Let me mark this as blocked:
+npm run progress -- update 8 "Blocked" "Cannot proceed: Need API credentials for external service integration. Specifically need: API key, secret key, and endpoint URL for the payment processing service"
+
+Agent: [commits]
+git commit -m "Req #8: Blocked - need API credentials"
+
+Agent: I've marked requirement #8 as blocked because I need API credentials to continue. Could you provide:
+1. API key
+2. Secret key
+3. Endpoint URL for the payment processing service
+
+Once you provide these, I can unblock requirement #8 and continue the implementation.
+```
+
+---
+
+## 10. EXAMPLES OF COMMIT MESSAGES
+
+### Good Commit Messages ✓
+```
+Req #5: Implement file reading utility function
+Req #5: Add error handling for missing files
+Req #5: Complete file I/O utilities implementation
+Req #12: Create initial agent_prompt.txt structure
+Req #12: Add startup procedure section
+Req #12: Add work execution guidelines
+Req #18: Add externalLink field to TypeScript types
+Req #18: Update file I/O utilities to handle externalLink field
+Req #23: Add status validation helper function
+Req #23: Implement validation in all commands
+```
+
+### Bad Commit Messages ✗
+```
+Fixed stuff                          (missing Req #ID)
+Update file                          (missing Req #ID, not descriptive)
+Added feature                        (missing Req #ID, not descriptive)
+WIP                                  (missing Req #ID, not meaningful)
+#5: Did some work                    (wrong format, should be "Req #5:")
+Requirement 5: Implemented utility   (wrong format, should be "Req #5:")
+```
+
+### Example Notes Updates
+
+**Progress update:**
+```bash
+npm run progress -- update 5 "In Progress" "Implemented readFile function, now working on writeFile function"
+```
+
+**Technical decision:**
+```bash
+npm run progress -- update 12 "In Progress" "Chose markdown format for agent_prompt.txt for better readability. Organized into 10 major sections as specified in requirement #21"
+```
+
+**Blocker encountered:**
+```bash
+npm run progress -- update 8 "Blocked" "Cannot proceed: The external API documentation is incomplete. Need user to provide clarification on authentication flow"
+```
+
+**Completion summary:**
+```bash
+npm run progress -- update 12 "Completed" "Completed implementation: Created comprehensive agent_prompt.txt with 10 sections covering workflow, validation, edge cases, and examples per requirement #21 specifications"
+```
+
+---
+
+## SUMMARY CHECKLIST
+
+Before starting ANY work, verify:
+- [ ] I have read progress.json
+- [ ] I understand which requirement to work on
+- [ ] No other requirement is "In Progress"
+- [ ] The requirement description is clear
+- [ ] Git working directory is clean
+- [ ] I have updated status to "In Progress"
+
+During work:
+- [ ] I commit after each logical unit
+- [ ] Every commit message starts with "Req #<ID>:"
+- [ ] I update notes when making progress or decisions
+- [ ] I keep the repository in a working state
+
+Before marking complete:
+- [ ] I have fulfilled all aspects of the requirement
+- [ ] I have committed all changes
+- [ ] I have updated status to "Completed" with summary
+- [ ] I have committed the progress.json update
+
+If blocked:
+- [ ] I have documented the blocker in detail
+- [ ] I have marked status as "Blocked"
+- [ ] I have committed the status change
+- [ ] I have asked the user for guidance
+
+---
+
+## REMEMBER
+
+- **ONE REQUIREMENT AT A TIME** - This is not negotiable
+- **ALWAYS use CLI** to update progress.json - Never edit directly
+- **COMMIT FREQUENTLY** - Keep repository always in good state
+- **ASK WHEN UNCLEAR** - Don't guess, don't assume
+- **READ EVERYTHING FIRST** - Understand full context before choosing what to work on
+
+This system exists to maintain clear progress tracking and ensure systematic, organized work. Follow these instructions precisely.

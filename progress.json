@@ -1,0 +1,272 @@
+[
+  {
+    "id": 1,
+    "title": "Set up TypeScript configuration",
+    "description": "Initialize TypeScript in the project with tsconfig.json, install necessary dependencies (@types/node, typescript), and configure for Node.js CLI development with appropriate compiler options",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 2,
+    "title": "Set up Biome for linting and formatting",
+    "description": "Install and configure Biome as the linter and formatter for the project. Create biome.json configuration file with appropriate rules for TypeScript and Node.js development",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 3,
+    "title": "Configure project build and structure",
+    "description": "Set up the source directory structure (src/), configure TypeScript build output (dist/), and add necessary package.json scripts for building and development workflow",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 4,
+    "title": "Define TypeScript types for progress.json schema",
+    "description": "Create TypeScript interfaces and types that represent the progress.json data structure, including Requirement type with id, title, description, status, notes, created, updated, and optional externalLink fields. Define Status type as union of allowed values: 'Not Started' | 'In Progress' | 'Completed' | 'Blocked'",
+    "status": "Not Started",
+    "notes": "Updated to include externalLink field per requirement #18",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 5,
+    "title": "Implement file I/O utilities for progress.json",
+    "description": "Create utility functions to read and write the progress.json file safely, including error handling for missing files, parsing errors, and write failures. Handle JSON serialization with proper formatting",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 6,
+    "title": "Set up Commander.js CLI framework",
+    "description": "Install Commander.js and create the basic CLI entry point structure with version, description, and command registration scaffold. Set up proper error handling and help text",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 7,
+    "title": "Configure package.json for npm run progress",
+    "description": "Update package.json to include the 'progress' script that runs the CLI tool, configure the bin field if needed, and ensure proper entry point configuration for the compiled JavaScript",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 8,
+    "title": "Implement 'init' command",
+    "description": "Create the init command that accepts a title and description, generates the first requirement with id=1, sets status to 'Not Started', and creates the progress.json file with proper timestamps",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 9,
+    "title": "Implement 'add' command",
+    "description": "Create the add command that accepts a title and description, reads existing progress.json, generates next sequential id, adds new requirement with 'Not Started' status and current timestamps, and writes updated file",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 10,
+    "title": "Implement 'update' command",
+    "description": "Create the update command that accepts requirement id, new status, and optional notes. Validates status value against allowed types, updates the specified requirement, sets new updated timestamp, and writes file",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 11,
+    "title": "Implement 'list' command",
+    "description": "Create the list command that reads progress.json and displays all requirements in a formatted, readable manner. Include id, title, status, and show updated timestamp. Consider color coding by status",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 12,
+    "title": "Create agent_prompt.txt file",
+    "description": "Write the agent_prompt.txt file with clear instructions for coding agents on how to read, understand, and update the progress.json file during their work. Include examples and best practices for status updates. See requirement #21 for more detailed specifications on content",
+    "status": "Completed",
+    "notes": "Created comprehensive agent_prompt.txt with 10 major sections: Critical Rules, Startup Procedure, Requirement Selection Workflow, Pre-Work Validation Checklist, Work Execution Guidelines, Completion Procedure, Blocker Handling, CLI Command Reference, Edge Case Handling, and Complete Workflow Examples. Includes detailed instructions covering workflow, validation, edge cases, commit strategy, and examples per requirement #21 specifications. Uses imperative tone throughout and is fully standalone.",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T20:30:00.000Z"
+  },
+  {
+    "id": 13,
+    "title": "Add usage examples to README",
+    "description": "Ensure README.md has complete, working examples of all CLI commands with realistic use cases. Verify all command syntax matches actual implementation",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T19:45:29.000Z",
+    "updated": "2025-12-01T19:45:29.000Z"
+  },
+  {
+    "id": 14,
+    "title": "Implement 'show' command",
+    "description": "Create the show command that displays detailed information for a single requirement by ID. Include all fields: id, title, description, status, notes, created, updated, and external link if present. Format output in a readable way with proper labels and formatting",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 15,
+    "title": "Implement 'delete' command",
+    "description": "Create the delete command that removes a requirement by ID. Must prompt for confirmation before deletion to prevent accidental data loss. Update progress.json and maintain ID sequence integrity. Return clear error if ID doesn't exist",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 16,
+    "title": "Implement 'complete' command",
+    "description": "Create the complete command as a shorthand for marking a requirement as 'Completed'. Accepts requirement ID and optional completion notes. Automatically updates status to 'Completed' and sets updated timestamp. Simpler alternative to 'update' command for this common operation",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 17,
+    "title": "Implement 'block' command",
+    "description": "Create the block command as a shorthand for marking a requirement as 'Blocked'. Accepts requirement ID and required reason (stored in notes field). Must provide reason when blocking to document the blocker. Updates status to 'Blocked' and sets updated timestamp",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 18,
+    "title": "Add external link support to schema",
+    "description": "Update the TypeScript types and JSON schema to include an optional 'externalLink' field on the Requirement type. This field supports URLs to external project management systems like Jira, GitHub Issues, Linear, etc. Update all file I/O utilities to handle this new field. Display the link in 'show' and 'list' commands when present",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 19,
+    "title": "Update 'add' command to support external links",
+    "description": "Enhance the add command to accept an optional --link parameter for specifying an external URL. Validate URL format to ensure it's a valid HTTP/HTTPS URL. Store the validated URL in the externalLink field of the new requirement",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 20,
+    "title": "Update 'update' command to support external links",
+    "description": "Enhance the update command to accept an optional --link parameter to update or set the external reference URL. Allow clearing the link with --link=\"\" to remove an existing external link. Validate URL format when setting a new link",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 21,
+    "title": "Create comprehensive agent_prompt.txt",
+    "description": "Write a detailed agent_prompt.txt file with instructions for coding agents. Define the agent workflow: read progress.json → work on one requirement → update progress → commit changes. Specify the one-requirement-at-a-time rule. Explain automatic status transitions (Not Started → In Progress when starting, → Completed when done). Include examples of when to update status vs notes. Document commit strategy: make small, frequent commits to keep the repository always in a good state. Provide example progress.json update patterns and best practices",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 22,
+    "title": "Add .gitignore file",
+    "description": "Create a .gitignore file to exclude build artifacts and dependencies from version control. Exclude: node_modules/, dist/, build/, .DS_Store, and other common artifacts. Explicitly keep progress.json tracked (don't ignore it). Add a comment in the .gitignore explaining why progress.json should be committed to version control",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 23,
+    "title": "Implement status validation",
+    "description": "Add strict validation to enforce only the four allowed status values: 'Not Started', 'In Progress', 'Completed', 'Blocked'. Return clear, helpful error messages when an invalid status is provided. Include the list of valid statuses in the error message to guide users. Implement this validation in all commands that modify status (init, add, update)",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 24,
+    "title": "Implement comprehensive error handling",
+    "description": "Add robust error handling throughout the CLI tool. Handle missing progress.json file gracefully with helpful messages. Handle corrupted JSON with clear error messages indicating the problem. Handle invalid requirement IDs (not found, out of range) with specific error messages. Handle concurrent access scenarios. Validate that required fields are provided on create/update operations. All errors should be user-friendly and actionable",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 25,
+    "title": "Add file locking mechanism",
+    "description": "Implement a file locking mechanism to prevent data corruption from simultaneous updates to progress.json. Use atomic write operations (write to temp file, then rename) to ensure file integrity. Handle lock timeouts appropriately with clear error messages. This prevents race conditions when multiple processes try to update progress.json concurrently",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 26,
+    "title": "Add pre-commit validation",
+    "description": "Set up a pre-commit hook that validates progress.json before allowing commits. Validate that progress.json is valid JSON with no syntax errors. Validate that all requirements have the required fields (id, title, description, status, notes, created, updated). Validate that all status values are one of the four allowed values. Fail the commit with a clear error message if validation fails. This ensures the repository always contains valid progress data",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 27,
+    "title": "Document commit strategy in README",
+    "description": "Add a section to README.md explaining the small, frequent commits philosophy. Provide examples of good commit messages for progress updates (e.g., 'Complete requirement #5: Implement file I/O utilities'). Document how agents should commit progress updates after completing each requirement or significant milestone. Emphasize the importance of keeping the repository always in a good, working state",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 28,
+    "title": "Add filtering to 'list' command",
+    "description": "Enhance the list command with filtering capabilities. Add --status flag to filter by status value (e.g., --status='In Progress'). Add --since and --until flags to filter by date range based on updated timestamp. Add --linked and --unlinked flags to filter by presence or absence of external links. Multiple filters should work together (AND logic)",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 29,
+    "title": "Add sorting to 'list' command",
+    "description": "Enhance the list command with sorting capabilities. Add --sort flag to sort by: id (default), updated, created, or status. Add --order flag to specify ascending (asc) or descending (desc) order. Default to ascending order if not specified. Sorting should work in combination with filtering",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 30,
+    "title": "Add output formats to 'list' command",
+    "description": "Enhance the list command with multiple output format options using a --format flag. Default format: formatted table with key info (id, title, status, updated). --format=json: full JSON output of matching requirements. --format=summary: show only counts by status (e.g., '5 In Progress, 8 Completed'). --format=detailed: include full descriptions and notes in the output. This provides flexibility for different use cases (human-readable, machine-readable, quick overview)",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:00:00.000Z",
+    "updated": "2025-12-01T20:00:00.000Z"
+  }
+]
