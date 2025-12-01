@@ -50,5 +50,8 @@
     "@biomejs/biome": "2.3.8",
     "@types/node": "^24.10.1",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "commander": "^14.0.2"
   }
 }
