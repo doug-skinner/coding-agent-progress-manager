@@ -268,5 +268,14 @@
     "notes": "",
     "created": "2025-12-01T20:00:00.000Z",
     "updated": "2025-12-01T20:00:00.000Z"
+  },
+  {
+    "id": 31,
+    "title": "Implement 'prompt' command",
+    "description": "Create the prompt command that outputs the complete contents of the agent_prompt.txt file to stdout. This allows users to easily pipe the instructions to other tools, copy them to clipboard, or share them with other systems. The command should read agent_prompt.txt from the repository root and output its contents without any additional formatting or modification. Should work as: npm run progress -- prompt",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-01T20:45:00.000Z",
+    "updated": "2025-12-01T20:45:00.000Z"
   }
 ]
