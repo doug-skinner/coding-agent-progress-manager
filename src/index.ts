@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { addCommand } from './commands/add.js';
 import { initCommand } from './commands/init.js';
+import { updateCommand } from './commands/update.js';
 
 // Get package version for CLI
 const packageJsonPath = join(__dirname, '../package.json');
@@ -38,8 +39,19 @@ program
     await addCommand(title, description);
   });
 
+// Update command
+program
+  .command('update')
+  .description('Update a requirement status and optionally its notes')
+  .argument('<id>', 'ID of the requirement to update', Number.parseInt)
+  .argument('<status>', 'New status (Not Started, In Progress, Completed, Blocked)')
+  .argument('[notes]', 'Optional notes to add')
+  .action(async (id: number, status: string, notes?: string) => {
+    await updateCommand(id, status, notes);
+  });
+
 // Command placeholders - will be implemented in subsequent requirements
-// TODO: Add commands: update, list, show, delete, complete, block, prompt
+// TODO: Add commands: list, show, delete, complete, block, prompt
 
 // Parse command-line arguments
 program.parse(process.argv);
