@@ -75,6 +75,10 @@ export async function listCommand(): Promise<void> {
     console.log(`Status: ${statusDisplay}`);
     console.log(`Updated: ${updatedDate}`);
 
+    if (req.externalLink) {
+      console.log(`Link: ${req.externalLink}`);
+    }
+
     if (req.notes) {
       // Truncate notes if too long
       const maxNotesLength = 100;
