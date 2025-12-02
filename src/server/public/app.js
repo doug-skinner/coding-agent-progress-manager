@@ -311,11 +311,194 @@ function initializePingMechanism() {
 }
 
 // ============================================================================
+// Requirements List Rendering
+// ============================================================================
+
+/**
+ * Load and display requirements
+ */
+async function loadRequirements() {
+  try {
+    // Show loading indicator
+    document.getElementById('loading-indicator').style.display = 'block';
+    document.getElementById('requirements-list').style.display = 'none';
+    document.getElementById('empty-state').style.display = 'none';
+
+    // Get current filters from UI
+    const filters = getCurrentFilters();
+
+    // Fetch requirements
+    const requirements = await fetchRequirements(filters);
+
+    // Hide loading indicator
+    document.getElementById('loading-indicator').style.display = 'none';
+
+    // Render requirements or show empty state
+    if (requirements.length === 0) {
+      document.getElementById('empty-state').style.display = 'block';
+    } else {
+      renderRequirements(requirements);
+    }
+
+    // Update status summary
+    updateStatusSummary(requirements);
+  } catch (error) {
+    document.getElementById('loading-indicator').style.display = 'none';
+    showError(`Failed to load requirements: ${error.message}`);
+  }
+}
+
+/**
+ * Get current filters from UI controls
+ */
+function getCurrentFilters() {
+  const filters = {};
+
+  const status = document.getElementById('filter-status').value;
+  if (status) {
+    filters.status = status;
+  }
+
+  const since = document.getElementById('filter-since').value;
+  if (since) {
+    filters.since = since;
+  }
+
+  const until = document.getElementById('filter-until').value;
+  if (until) {
+    filters.until = until;
+  }
+
+  const linked = document.getElementById('filter-linked').checked;
+  if (linked) {
+    filters.linked = true;
+  }
+
+  const unlinked = document.getElementById('filter-unlinked').checked;
+  if (unlinked) {
+    filters.unlinked = true;
+  }
+
+  const sortBy = document.getElementById('sort-by').value;
+  if (sortBy) {
+    filters.sort = sortBy;
+  }
+
+  const sortOrder = document.getElementById('sort-order').value;
+  if (sortOrder) {
+    filters.order = sortOrder;
+  }
+
+  return filters;
+}
+
+/**
+ * Render requirements list
+ */
+function renderRequirements(requirements) {
+  const container = document.getElementById('requirements-list');
+  container.innerHTML = '';
+
+  requirements.forEach((req) => {
+    const card = renderRequirementCard(req);
+    container.appendChild(card);
+  });
+
+  container.style.display = 'block';
+}
+
+/**
+ * Render a single requirement card
+ */
+function renderRequirementCard(requirement) {
+  const card = document.createElement('div');
+  card.className = 'requirement-card';
+  card.dataset.id = requirement.id;
+
+  const statusBadgeClass = getStatusBadgeClass(requirement.status);
+
+  card.innerHTML = `
+    <div class="requirement-header">
+      <div style="flex: 1;">
+        <div class="requirement-id">Requirement #${requirement.id}</div>
+        <h3 class="requirement-title">${escapeHtml(requirement.title)}</h3>
+      </div>
+      <span class="badge ${statusBadgeClass}">${escapeHtml(requirement.status)}</span>
+    </div>
+
+    <p class="requirement-description">${escapeHtml(requirement.description)}</p>
+
+    ${requirement.notes ? `<div class="requirement-notes">${escapeHtml(requirement.notes)}</div>` : ''}
+
+    <div class="requirement-meta">
+      <span>Created: ${formatDate(requirement.created)}</span>
+      <span>Updated: ${formatDate(requirement.updated)}</span>
+      ${requirement.externalLink ? `<a href="${escapeHtml(requirement.externalLink)}" target="_blank" rel="noopener noreferrer" class="requirement-link">🔗 External Link</a>` : ''}
+    </div>
+
+    <div class="requirement-actions">
+      <button class="secondary" onclick="openEditModal(${requirement.id})">Edit</button>
+      <button class="secondary outline" onclick="openDeleteModal(${requirement.id})">Delete</button>
+    </div>
+  `;
+
+  return card;
+}
+
+/**
+ * Update status summary badges
+ */
+function updateStatusSummary(requirements) {
+  const summary = {
+    'Not Started': 0,
+    'In Progress': 0,
+    'Completed': 0,
+    'Blocked': 0,
+  };
+
+  requirements.forEach((req) => {
+    if (summary[req.status] !== undefined) {
+      summary[req.status]++;
+    }
+  });
+
+  document.getElementById('summary-not-started').textContent = `Not Started: ${summary['Not Started']}`;
+  document.getElementById('summary-in-progress').textContent = `In Progress: ${summary['In Progress']}`;
+  document.getElementById('summary-completed').textContent = `Completed: ${summary['Completed']}`;
+  document.getElementById('summary-blocked').textContent = `Blocked: ${summary['Blocked']}`;
+}
+
+// ============================================================================
 // Initialization
 // ============================================================================
 
-// Start ping mechanism when page loads
+// Start ping mechanism and load requirements when page loads
 document.addEventListener('DOMContentLoaded', () => {
   initializePingMechanism();
   console.log('Ping mechanism initialized (30s interval)');
+
+  // Load requirements on page load
+  loadRequirements();
+
+  // Set up refresh button
+  document.getElementById('refresh-btn').addEventListener('click', () => {
+    loadRequirements();
+  });
+
+  // Set up apply filters button
+  document.getElementById('apply-filters').addEventListener('click', () => {
+    loadRequirements();
+  });
+
+  // Set up clear filters button
+  document.getElementById('clear-filters').addEventListener('click', () => {
+    document.getElementById('filter-status').value = '';
+    document.getElementById('filter-since').value = '';
+    document.getElementById('filter-until').value = '';
+    document.getElementById('filter-linked').checked = false;
+    document.getElementById('filter-unlinked').checked = false;
+    document.getElementById('sort-by').value = 'id';
+    document.getElementById('sort-order').value = 'asc';
+    loadRequirements();
+  });
 });
