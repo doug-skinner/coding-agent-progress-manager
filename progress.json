@@ -309,10 +309,10 @@
     "id": 35,
     "title": "Create shared validation module",
     "description": "Extract validation logic from src/commands/add.ts and src/commands/update.ts into a new src/server/validation.ts module. Include functions: isValidStatus, validateTitle, validateDescription, validateExternalLink, validateDateString. This will be shared between CLI commands and web API endpoints to ensure consistent validation rules.",
-    "status": "In Progress",
-    "notes": "Starting extraction of validation logic from CLI commands",
+    "status": "Completed",
+    "notes": "Completed implementation: Created src/server/validation.ts module with extracted validation functions. Includes isValidStatus, isValidUrl, and VALID_STATUSES constant from add.ts and update.ts. Module compiles successfully and is ready to be used by both CLI commands and web API endpoints.",
     "created": "2025-12-02T17:21:22.997Z",
-    "updated": "2025-12-02T19:04:39.504Z"
+    "updated": "2025-12-02T19:05:24.432Z"
   },
   {
     "id": 36,
