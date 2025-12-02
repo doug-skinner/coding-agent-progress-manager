@@ -354,10 +354,10 @@
     "id": 40,
     "title": "Register serve command in CLI",
     "description": "Register the serve command in src/index.ts with Commander.js. Include --port (-p) option to specify custom port (default 3005). Command should be invoked as: cap-manager serve or cap-manager serve --port 8080.",
-    "status": "In Progress",
-    "notes": "Starting registration of serve command in CLI",
+    "status": "Completed",
+    "notes": "Completed implementation: Registered serve command in src/index.ts with Commander.js. Added --port (-p) option with default value 3005. Command works as: cap-manager serve or cap-manager serve --port 8080. Verified with --help flag.",
     "created": "2025-12-02T17:21:23.856Z",
-    "updated": "2025-12-02T19:19:50.156Z"
+    "updated": "2025-12-02T19:20:37.089Z"
   },
   {
     "id": 41,
