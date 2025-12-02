@@ -46,16 +46,33 @@ export function readProgress(): Requirement[] {
 
 /**
  * Write requirements array to progress.json file with proper formatting
+ * Uses atomic write operation (temp file + rename) to prevent data corruption
  * @param requirements - Array of requirements to write
  * @throws Error if file can't be written
  */
 export function writeProgress(requirements: Requirement[]): void {
   const filePath = getProgressFilePath();
+  const tempPath = `${filePath}.tmp.${process.pid}`;
 
   try {
     const jsonContent = JSON.stringify(requirements, null, 2);
-    fs.writeFileSync(filePath, `${jsonContent}\n`, 'utf-8');
+
+    // Write to temporary file first
+    fs.writeFileSync(tempPath, `${jsonContent}\n`, 'utf-8');
+
+    // Atomically rename temp file to actual file
+    // This is atomic on most filesystems and prevents partial writes
+    fs.renameSync(tempPath, filePath);
   } catch (error) {
+    // Clean up temp file if it exists
+    try {
+      if (fs.existsSync(tempPath)) {
+        fs.unlinkSync(tempPath);
+      }
+    } catch {
+      // Ignore cleanup errors
+    }
+
     if (error instanceof Error) {
       throw new Error(`Failed to write progress.json: ${error.message}`);
     }

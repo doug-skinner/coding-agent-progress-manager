@@ -24,6 +24,7 @@ npm-debug.log*
 # Temporary files
 tmp/
 temp/
+*.tmp.*
 
 # IMPORTANT: progress.json should be committed to version control
 # This file tracks requirements and progress across coding agent runs
