@@ -16,11 +16,7 @@ function isValidUrl(urlString: string): boolean {
 /**
  * Add a new requirement to progress.json
  */
-export async function addCommand(
-  title: string,
-  description: string,
-  link?: string
-): Promise<void> {
+export async function addCommand(title: string, description: string, link?: string): Promise<void> {
   // Validate external link if provided
   if (link && !isValidUrl(link)) {
     console.error(

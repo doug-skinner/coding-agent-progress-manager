@@ -456,6 +456,108 @@ The `progress.json` file contains an array of requirement objects, each with the
 
 The `status` field can be one of: "Not Started", "In Progress", "Completed", or "Blocked".
 
+## Commit Strategy for Coding Agents
+
+When working with this progress tracking system, follow these commit practices to maintain a clean, understandable repository history:
+
+### Philosophy: Small, Frequent Commits
+
+Make small, frequent commits rather than large, infrequent ones. Each commit should represent a logical unit of work that leaves the repository in a good, working state.
+
+**Why?**
+- Easier to understand what changed and why
+- Easier to identify and revert problematic changes
+- Provides clear progress markers
+- Keeps the repository always in a deployable state
+
+### Commit Message Format
+
+**REQUIRED FORMAT:** All commits related to requirement work must start with `Req #<ID>:` followed by a descriptive message.
+
+**Examples of Good Commit Messages:**
+
+```bash
+# When starting work
+Req #5: Mark as in progress
+
+# During implementation
+Req #5: Implement file reading utility function
+Req #5: Add error handling for missing files
+Req #5: Add write functionality with formatting
+
+# When completing
+Req #5: Mark requirement as completed
+```
+
+### When to Commit
+
+Commit after each "logical unit" - when a feature works, even if it represents only partial progress on the requirement:
+
+**Commit after:**
+- A new function is implemented and tested
+- A configuration file is created and working
+- A bug is fixed and verified
+- A refactor is complete and code still works
+- A file structure is set up correctly
+- Status updates to progress.json (always commit these separately)
+
+**Example workflow for a requirement:**
+
+```bash
+# Start requirement
+cap-manager update 5 "In Progress" "Starting work on file I/O utilities"
+git add progress.json
+git commit -m "Req #5: Mark as in progress"
+
+# Implement first part
+# ... code changes ...
+git add src/fileUtils.ts
+git commit -m "Req #5: Implement file reading utility function"
+
+# Implement second part
+# ... code changes ...
+git add src/fileUtils.ts
+git commit -m "Req #5: Add file writing utility function"
+
+# Add error handling
+# ... code changes ...
+git add src/fileUtils.ts
+git commit -m "Req #5: Add error handling for file operations"
+
+# Complete requirement
+cap-manager complete 5 "Completed implementation: Created utility functions..."
+git add progress.json
+git commit -m "Req #5: Mark requirement as completed"
+```
+
+### What NOT to Do
+
+**Bad commit messages** (missing Req #ID):
+```bash
+git commit -m "Fixed stuff"
+git commit -m "Update file"
+git commit -m "WIP"
+```
+
+**Bad practice** (batch commits):
+```bash
+# Don't wait to commit everything at once
+# Bad: Implement entire feature → one giant commit
+# Good: Implement piece by piece → multiple focused commits
+```
+
+### Repository State Philosophy
+
+**Golden Rule:** Keep the repository ALWAYS in a good, working state.
+
+- Commit working code frequently
+- Don't leave broken code uncommitted
+- Each commit should represent a stable checkpoint
+- Tests should pass at each commit (if tests exist)
+- Build should succeed at each commit
+
+This means you should commit even incomplete features, as long as they don't break existing functionality. It's better to have 10 small working commits than 1 large commit with mixed changes.
+
 ## Development
 
 ### Local Development Setup
