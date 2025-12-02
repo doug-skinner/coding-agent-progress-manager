@@ -444,10 +444,10 @@
     "id": 50,
     "title": "Update build process to copy static files",
     "description": "Update package.json build scripts to copy static files (HTML, CSS, JS) from src/server/public/ to dist/server/public/ after TypeScript compilation. Add copy-static script: 'mkdir -p dist/server/public && cp src/server/public/* dist/server/public/'. Update main build script to run: 'tsc && npm run copy-static'.",
-    "status": "Not Started",
-    "notes": "",
+    "status": "In Progress",
+    "notes": "Adding copy-static script to package.json to copy HTML, CSS, JS files to dist/",
     "created": "2025-12-02T17:21:25.644Z",
-    "updated": "2025-12-02T17:21:25.644Z"
+    "updated": "2025-12-02T21:44:06.961Z"
   },
   {
     "id": 51,
