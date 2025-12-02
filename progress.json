@@ -255,10 +255,10 @@
     "id": 29,
     "title": "Add sorting to 'list' command",
     "description": "Enhance the list command with sorting capabilities. Add --sort flag to sort by: id (default), updated, created, or status. Add --order flag to specify ascending (asc) or descending (desc) order. Default to ascending order if not specified. Sorting should work in combination with filtering",
-    "status": "Not Started",
-    "notes": "",
+    "status": "Completed",
+    "notes": "Implemented sorting options for list command: --sort (id, updated, created, status) and --order (asc, desc). Sorting works in combination with all filtering options.",
     "created": "2025-12-01T20:00:00.000Z",
-    "updated": "2025-12-01T20:00:00.000Z"
+    "updated": "2025-12-02T16:33:55.718Z"
   },
   {
     "id": 30,
