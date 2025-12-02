@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Progress Manager - Requirements Tracker</title>
+
+  <!-- Pico.css from CDN -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.min.css">
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <!-- Main container -->
+  <main class="container">
+    <!-- Header -->
+    <header>
+      <h1>📊 Progress Manager</h1>
+      <p>Manage your requirements and track progress</p>
+
+      <!-- Status summary badges -->
+      <div id="status-summary" class="status-summary">
+        <span class="badge badge-not-started" id="summary-not-started">Not Started: 0</span>
+        <span class="badge badge-in-progress" id="summary-in-progress">In Progress: 0</span>
+        <span class="badge badge-completed" id="summary-completed">Completed: 0</span>
+        <span class="badge badge-blocked" id="summary-blocked">Blocked: 0</span>
+      </div>
+    </header>
+
+    <!-- Filters and Controls -->
+    <section class="controls-section">
+      <details>
+        <summary>Filters & Sorting</summary>
+        <div class="grid">
+          <!-- Filters -->
+          <div>
+            <label for="filter-status">Status</label>
+            <select id="filter-status">
+              <option value="">All Statuses</option>
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              <option value="Blocked">Blocked</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="filter-since">Since Date</label>
+            <input type="date" id="filter-since">
+          </div>
+
+          <div>
+            <label for="filter-until">Until Date</label>
+            <input type="date" id="filter-until">
+          </div>
+        </div>
+
+        <div class="grid">
+          <div>
+            <label>
+              <input type="checkbox" id="filter-linked">
+              Has External Link
+            </label>
+          </div>
+          <div>
+            <label>
+              <input type="checkbox" id="filter-unlinked">
+              No External Link
+            </label>
+          </div>
+        </div>
+
+        <!-- Sorting -->
+        <div class="grid">
+          <div>
+            <label for="sort-by">Sort By</label>
+            <select id="sort-by">
+              <option value="id">ID</option>
+              <option value="updated">Updated Date</option>
+              <option value="created">Created Date</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="sort-order">Order</label>
+            <select id="sort-order">
+              <option value="asc">Ascending</option>
+              <option value="desc">Descending</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button id="apply-filters" class="secondary">Apply Filters</button>
+          <button id="clear-filters" class="secondary outline">Clear Filters</button>
+        </div>
+      </details>
+    </section>
+
+    <!-- Action buttons -->
+    <div class="action-buttons">
+      <button id="add-requirement-btn">+ Add Requirement</button>
+      <button id="refresh-btn" class="secondary">🔄 Refresh</button>
+    </div>
+
+    <!-- Messages -->
+    <div id="error-message" class="message error-message" style="display: none;"></div>
+    <div id="success-message" class="message success-message" style="display: none;"></div>
+
+    <!-- Requirements list -->
+    <section id="requirements-container">
+      <div id="loading-indicator" style="text-align: center;">
+        <p aria-busy="true">Loading requirements...</p>
+      </div>
+      <div id="requirements-list"></div>
+      <div id="empty-state" style="display: none; text-align: center;">
+        <p>No requirements found.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Add/Edit Requirement Modal -->
+  <dialog id="requirement-modal">
+    <article>
+      <header>
+        <button aria-label="Close" rel="prev" id="close-modal-btn"></button>
+        <h3 id="modal-title">Add Requirement</h3>
+      </header>
+      <form id="requirement-form">
+        <input type="hidden" id="requirement-id">
+
+        <label for="requirement-title">
+          Title
+          <input type="text" id="requirement-title" required>
+        </label>
+
+        <label for="requirement-description">
+          Description
+          <textarea id="requirement-description" rows="4" required></textarea>
+        </label>
+
+        <label for="requirement-link">
+          External Link (optional)
+          <input type="url" id="requirement-link" placeholder="https://...">
+        </label>
+
+        <!-- Status field (only shown in edit mode) -->
+        <div id="status-field" style="display: none;">
+          <label for="requirement-status">
+            Status
+            <select id="requirement-status">
+              <option value="Not Started">Not Started</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+              <option value="Blocked">Blocked</option>
+            </select>
+          </label>
+        </div>
+
+        <!-- Notes field (only shown in edit mode) -->
+        <div id="notes-field" style="display: none;">
+          <label for="requirement-notes">
+            Notes
+            <textarea id="requirement-notes" rows="3"></textarea>
+          </label>
+        </div>
+
+        <footer>
+          <button type="button" id="cancel-modal-btn" class="secondary">Cancel</button>
+          <button type="submit" id="submit-modal-btn">Save</button>
+        </footer>
+      </form>
+    </article>
+  </dialog>
+
+  <!-- Delete Confirmation Modal -->
+  <dialog id="delete-modal">
+    <article>
+      <header>
+        <button aria-label="Close" rel="prev" id="close-delete-modal-btn"></button>
+        <h3>Confirm Deletion</h3>
+      </header>
+      <p>Are you sure you want to delete this requirement?</p>
+      <div id="delete-requirement-details"></div>
+      <footer>
+        <button type="button" id="cancel-delete-btn" class="secondary">Cancel</button>
+        <button type="button" id="confirm-delete-btn" class="contrast">Delete</button>
+      </footer>
+    </article>
+  </dialog>
+
+  <!-- JavaScript -->
+  <script src="/app.js"></script>
+</body>
+</html>
