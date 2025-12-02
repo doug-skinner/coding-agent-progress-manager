@@ -10,6 +10,7 @@ import { deleteCommand } from './commands/delete.js';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
 import { promptCommand } from './commands/prompt.js';
+import { serveCommand } from './commands/serve.js';
 import { showCommand } from './commands/show.js';
 import { updateCommand } from './commands/update.js';
 
@@ -130,6 +131,16 @@ program
   .description('Output the agent_prompt.txt file contents')
   .action(async () => {
     await promptCommand();
+  });
+
+// Serve command
+program
+  .command('serve')
+  .description('Start web UI server for managing requirements')
+  .option('-p, --port <number>', 'Port to run server on (default: 3005)', '3005')
+  .action(async (options: { port?: string }) => {
+    const port = options.port ? Number.parseInt(options.port, 10) : 3005;
+    await serveCommand(port);
   });
 
 // Parse command-line arguments
