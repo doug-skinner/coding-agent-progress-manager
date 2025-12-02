@@ -175,9 +175,9 @@
     "title": "Update 'update' command to support external links",
     "description": "Enhance the update command to accept an optional --link parameter to update or set the external reference URL. Allow clearing the link with --link=\"\" to remove an existing external link. Validate URL format when setting a new link",
     "status": "In Progress",
-    "notes": "Starting work on adding --link parameter to update command with ability to set, update, or clear external links",
+    "notes": "Testing link clearing",
     "created": "2025-12-01T20:00:00.000Z",
-    "updated": "2025-12-02T14:22:09.774Z"
+    "updated": "2025-12-02T14:27:10.641Z"
   },
   {
     "id": 21,

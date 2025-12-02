@@ -54,8 +54,9 @@ program
   .argument('<id>', 'ID of the requirement to update', Number.parseInt)
   .argument('<status>', 'New status (Not Started, In Progress, Completed, Blocked)')
   .argument('[notes]', 'Optional notes to add')
-  .action(async (id: number, status: string, notes?: string) => {
-    await updateCommand(id, status, notes);
+  .option('-l, --link <url>', 'Set or update external link (use empty string "" to clear)')
+  .action(async (id: number, status: string, notes?: string, options?: { link?: string }) => {
+    await updateCommand(id, status, notes, options?.link);
   });
 
 // List command
