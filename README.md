@@ -354,6 +354,95 @@ cap-manager prompt > my_agent_instructions.txt
 - Useful for piping to other tools or copying instructions
 - No additional formatting or modifications
 
+#### `serve` - Start Web UI Server
+
+Launch a web server to manage requirements through a browser interface:
+
+```bash
+cap-manager serve [options]
+```
+
+**Options:**
+
+- `-p, --port <number>` - Port number (default: 3005)
+
+**Examples:**
+
+```bash
+# Start web UI on default port 3005
+cap-manager serve
+
+# Start web UI on custom port
+cap-manager serve --port 8080
+```
+
+**What it does:**
+
+- Starts an Express web server with a browser-based UI
+- Automatically opens your default browser to the UI
+- Provides full CRUD operations (Create, Read, Update, Delete) for requirements
+- Includes filtering and sorting capabilities
+- Session management with 15-minute inactivity timeout
+- Graceful shutdown on Ctrl+C
+
+**Web UI Features:**
+
+- **Dashboard View**: Color-coded status summary badges showing counts by status
+- **Requirements List**: Browse all requirements with detailed information
+- **Filtering**: Filter by status, date range (since/until), and external link presence
+- **Sorting**: Sort by ID, updated date, created date, or status (ascending/descending)
+- **Add Requirement**: Create new requirements with title, description, and optional external link
+- **Edit Requirement**: Update existing requirements including status, notes, and all fields
+- **Delete Requirement**: Remove requirements with confirmation modal
+- **Validation**: Client-side and server-side validation for all inputs
+- **Session Management**: Automatic server shutdown after 15 minutes of inactivity (ping every 30 seconds)
+
+**Port Configuration:**
+
+The serve command accepts a custom port via the `--port` flag:
+
+```bash
+# Run on port 3000
+cap-manager serve --port 3000
+
+# Run on port 8080
+cap-manager serve --port 8080
+```
+
+**Browser Behavior:**
+
+When you run `cap-manager serve`, the server will:
+1. Start the Express server on the specified port
+2. Automatically open your default browser to `http://localhost:<port>`
+3. Display connection information in the terminal:
+
+   ```text
+   🚀 Server started on port 3005
+   📊 Web UI: http://localhost:3005
+   ⏱️  Session timeout: 15 minutes of inactivity
+   ```
+
+**Session Timeout:**
+
+The web server includes automatic session management:
+
+- Client pings server every 30 seconds to keep session alive
+- Server shuts down automatically after 15 minutes of no activity
+- Graceful shutdown on Ctrl+C or SIGTERM signal
+- Session check runs every 60 seconds
+
+**Use Cases:**
+
+The web UI is ideal for:
+
+- **Visual Management**: Easier to browse and manage many requirements
+- **Human Interaction**: When you need a GUI instead of CLI
+- **Filtering & Searching**: Quickly find specific requirements
+- **Bulk Editing**: Update multiple requirements in a session
+- **Project Planning**: Review and organize requirements visually
+
+**Note:** The CLI commands remain the primary interface for automated workflows and coding agents. The web UI is optional and designed for human interaction.
+
 ### Realistic Workflow Examples
 
 #### Example 1: Starting a New Project
