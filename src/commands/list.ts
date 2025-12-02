@@ -41,10 +41,18 @@ function formatDate(isoDate: string): string {
   });
 }
 
+export interface ListOptions {
+  status?: string;
+  since?: string;
+  until?: string;
+  linked?: boolean;
+  unlinked?: boolean;
+}
+
 /**
- * List all requirements in a formatted table
+ * List all requirements in a formatted table with optional filtering
  */
-export async function listCommand(): Promise<void> {
+export async function listCommand(options: ListOptions = {}): Promise<void> {
   // Read requirements
   let requirements: Requirement[];
   try {
@@ -54,8 +62,45 @@ export async function listCommand(): Promise<void> {
     process.exit(1);
   }
 
-  if (requirements.length === 0) {
-    console.log('No requirements found.');
+  // Apply filters
+  let filtered = requirements;
+
+  // Filter by status
+  if (options.status) {
+    filtered = filtered.filter((req) => req.status === options.status);
+  }
+
+  // Filter by date range (since)
+  if (options.since) {
+    const sinceDate = new Date(options.since);
+    if (Number.isNaN(sinceDate.getTime())) {
+      console.error(`Error: Invalid date format for --since: "${options.since}"`);
+      process.exit(1);
+    }
+    filtered = filtered.filter((req) => new Date(req.updated) >= sinceDate);
+  }
+
+  // Filter by date range (until)
+  if (options.until) {
+    const untilDate = new Date(options.until);
+    if (Number.isNaN(untilDate.getTime())) {
+      console.error(`Error: Invalid date format for --until: "${options.until}"`);
+      process.exit(1);
+    }
+    filtered = filtered.filter((req) => new Date(req.updated) <= untilDate);
+  }
+
+  // Filter by external link presence
+  if (options.linked) {
+    filtered = filtered.filter((req) => req.externalLink !== undefined);
+  }
+
+  if (options.unlinked) {
+    filtered = filtered.filter((req) => req.externalLink === undefined);
+  }
+
+  if (filtered.length === 0) {
+    console.log('No requirements match the specified filters.');
     return;
   }
 
@@ -65,7 +110,7 @@ export async function listCommand(): Promise<void> {
   console.log('='.repeat(80) + '\n');
 
   // Print each requirement
-  for (const req of requirements) {
+  for (const req of filtered) {
     const color = getStatusColor(req.status);
     const statusDisplay = `${color}${req.status}${COLORS.reset}`;
     const updatedDate = formatDate(req.updated);
@@ -93,7 +138,7 @@ export async function listCommand(): Promise<void> {
   }
 
   // Print summary
-  const statusCounts = requirements.reduce(
+  const statusCounts = filtered.reduce(
     (acc, req) => {
       acc[req.status] = (acc[req.status] || 0) + 1;
       return acc;
@@ -102,7 +147,7 @@ export async function listCommand(): Promise<void> {
   );
 
   console.log('\nSummary:');
-  console.log(`Total: ${requirements.length} requirements`);
+  console.log(`Total: ${filtered.length} requirements`);
   if (statusCounts['Not Started']) {
     console.log(`${COLORS.gray}Not Started: ${statusCounts['Not Started']}${COLORS.reset}`);
   }

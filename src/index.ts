@@ -64,8 +64,13 @@ program
 program
   .command('list')
   .description('List all requirements with their status')
-  .action(async () => {
-    await listCommand();
+  .option('--status <status>', 'Filter by status')
+  .option('--since <date>', 'Filter by updated date (after)')
+  .option('--until <date>', 'Filter by updated date (before)')
+  .option('--linked', 'Show only requirements with external links')
+  .option('--unlinked', 'Show only requirements without external links')
+  .action(async (options: { status?: string; since?: string; until?: string; linked?: boolean; unlinked?: boolean }) => {
+    await listCommand(options);
   });
 
 // Show command
