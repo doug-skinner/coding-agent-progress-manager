@@ -165,10 +165,10 @@
     "id": 19,
     "title": "Update 'add' command to support external links",
     "description": "Enhance the add command to accept an optional --link parameter for specifying an external URL. Validate URL format to ensure it's a valid HTTP/HTTPS URL. Store the validated URL in the externalLink field of the new requirement",
-    "status": "Not Started",
-    "notes": "",
+    "status": "In Progress",
+    "notes": "Starting work on adding --link parameter to add command with URL validation",
     "created": "2025-12-01T20:00:00.000Z",
-    "updated": "2025-12-01T20:00:00.000Z"
+    "updated": "2025-12-02T14:11:53.808Z"
   },
   {
     "id": 20,
