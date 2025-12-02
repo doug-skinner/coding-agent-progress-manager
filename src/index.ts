@@ -42,8 +42,9 @@ program
   .description('Add a new requirement to progress.json')
   .argument('<title>', 'Title of the requirement')
   .argument('<description>', 'Description of the requirement')
-  .action(async (title: string, description: string) => {
-    await addCommand(title, description);
+  .option('-l, --link <url>', 'External link (e.g., Jira, GitHub Issue)')
+  .action(async (title: string, description: string, options: { link?: string }) => {
+    await addCommand(title, description, options.link);
   });
 
 // Update command
