@@ -32,12 +32,19 @@ At the beginning of EVERY conversation, you MUST:
    - Confirm it exists and is valid JSON
    - If missing or corrupted, see "Edge Case Handling" section below
 
-3. **Check for existing "In Progress" requirements**
+3. **Check if all work is done**
+   - Count requirements by status
+   - If ALL requirements are either "Completed" or "Blocked":
+     * Output the completion summary (see Section 6.5)
+     * STOP - do not proceed to select more work
+     * Wait for user guidance on blocked items
+
+4. **Check for existing "In Progress" requirements**
    - If ANY requirement has status "In Progress", that is your active work
    - You MUST continue that requirement before starting anything else
    - If multiple are "In Progress", see "Edge Case Handling" section
 
-4. **Read ALL requirements**
+5. **Read ALL requirements**
    - Do not skip this step
    - You need full context to make priority decisions
 
@@ -239,6 +246,12 @@ git add progress.json
 git commit -m "Req #<ID>: Mark requirement as completed"
 ```
 
+### After Completion: Automatic Continuation
+
+After completing and committing a requirement, you MUST immediately check for the next requirement to work on. See Section 6.5 "Continuous Loop Execution" for the complete loop behavior and decision logic.
+
+Do NOT wait for user input - automatically select and begin the next "Not Started" requirement if one exists.
+
 ---
 
 ## 6. BLOCKER HANDLING
@@ -274,6 +287,87 @@ Mark a requirement as "Blocked" when:
    - Explain exactly what is blocking you
    - Explain what you need to proceed
    - Do NOT move to another requirement without user direction
+
+---
+
+## 6.5. CONTINUOUS LOOP EXECUTION
+
+### Automatic Continuation Behavior
+
+After completing a requirement, you MUST automatically continue to the next requirement without waiting for user input. This creates a continuous loop that runs until all requirements are either "Completed" or "Blocked".
+
+### Loop Execution Flow
+
+```
+Complete current requirement
+  ↓
+Commit the completion
+  ↓
+Check remaining requirements
+  ↓
+Are there any "Not Started" requirements?
+  YES → Select next requirement using Priority Determination Algorithm (Section 2)
+        Update to "In Progress"
+        Begin work immediately
+  NO → Continue to next check
+  ↓
+Are ALL remaining requirements either "Completed" or "Blocked"?
+  YES → Output completion summary and STOP
+  NO → This should not happen (investigate and ask user)
+```
+
+### After Completing a Requirement
+
+Immediately after marking a requirement as "Completed" and committing the change:
+
+1. **Check for remaining work:**
+   ```bash
+   cap-manager list
+   ```
+
+2. **Evaluate remaining requirements:**
+   - Count "Not Started" requirements
+   - Count "Blocked" requirements
+   - Count "Completed" requirements
+
+3. **Decision logic:**
+   - If ANY "Not Started" requirements exist: Select the highest priority one using the Priority Determination Algorithm (Section 2) and immediately begin work
+   - If ALL remaining requirements are "Completed" or "Blocked": Proceed to completion summary
+
+### Termination Conditions
+
+The continuous loop STOPS only when:
+
+1. **All work is done:** Every requirement is either "Completed" or "Blocked"
+2. **You encounter a blocker:** When you mark a requirement as "Blocked", STOP immediately and ask user for guidance (do not continue to other requirements)
+
+### Completion Summary Output
+
+When all requirements are either "Completed" or "Blocked", output this summary:
+
+```
+🎉 All Requirements Processed!
+
+Summary:
+- Total Requirements: X
+- Completed: Y
+- Blocked: Z
+
+[If any blocked exist:]
+The following requirements are blocked and need attention:
+- #A: [Title] - [Brief blocker reason]
+- #B: [Title] - [Brief blocker reason]
+
+[If none blocked:]
+All requirements have been completed! 🎊
+```
+
+### Important Loop Behavior Notes
+
+- **No waiting between requirements:** Transition immediately from one to the next
+- **Stop on blockers:** If you mark ANY requirement as "Blocked", stop the loop and ask user
+- **One at a time still applies:** Even in continuous mode, you MUST complete one requirement entirely before starting the next
+- **User can interrupt:** If user sends a message during the loop, stop and respond to their message first
 
 ---
 
@@ -451,7 +545,14 @@ cap-manager update 5 "Completed" "Completed implementation: Created utility func
 Agent: [commits]
 git commit -m "Req #5: Mark requirement as completed"
 
-Agent: Requirement #5 is now complete. Ready to work on the next requirement when you're ready.
+Agent: Requirement #5 is now complete. Let me check for the next requirement to work on...
+[runs: cap-manager list]
+
+Agent: I see requirement #6 is "Not Started". This is the next logical requirement to work on.
+Let me update it to "In Progress" and begin work:
+[runs: cap-manager update 6 "In Progress" "Starting work on this requirement"]
+[commits the status change]
+[begins working on requirement #6 immediately]
 ```
 
 ### Example: Hitting a Blocker
@@ -558,9 +659,11 @@ If blocked:
 ## REMEMBER
 
 - **ONE REQUIREMENT AT A TIME** - This is not negotiable
+- **AUTOMATIC CONTINUATION** - After completing a requirement, immediately continue to the next one
 - **ALWAYS use CLI** to update progress.json - Never edit directly
 - **COMMIT FREQUENTLY** - Keep repository always in good state
 - **ASK WHEN UNCLEAR** - Don't guess, don't assume
 - **READ EVERYTHING FIRST** - Understand full context before choosing what to work on
+- **STOP ON BLOCKERS** - If you mark something as "Blocked", stop and ask user for guidance
 
 This system exists to maintain clear progress tracking and ensure systematic, organized work. Follow these instructions precisely.
