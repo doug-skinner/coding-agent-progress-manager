@@ -71,6 +71,7 @@ program
   .option('--unlinked', 'Show only requirements without external links')
   .option('--sort <field>', 'Sort by: id, updated, created, or status (default: id)')
   .option('--order <direction>', 'Sort order: asc or desc (default: asc)')
+  .option('--format <type>', 'Output format: default, json, summary, or detailed (default: default)')
   .action(async (options: {
     status?: string;
     since?: string;
@@ -79,6 +80,7 @@ program
     unlinked?: boolean;
     sort?: 'id' | 'updated' | 'created' | 'status';
     order?: 'asc' | 'desc';
+    format?: 'default' | 'json' | 'summary' | 'detailed';
   }) => {
     await listCommand(options);
   });

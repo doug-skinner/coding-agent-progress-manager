@@ -49,6 +49,7 @@ export interface ListOptions {
   unlinked?: boolean;
   sort?: 'id' | 'updated' | 'created' | 'status';
   order?: 'asc' | 'desc';
+  format?: 'default' | 'json' | 'summary' | 'detailed';
 }
 
 /**
@@ -131,61 +132,135 @@ export async function listCommand(options: ListOptions = {}): Promise<void> {
     return;
   }
 
-  // Print header
-  console.log('\n' + '='.repeat(80));
-  console.log('Requirements List');
-  console.log('='.repeat(80) + '\n');
+  // Output based on format
+  const format = options.format || 'default';
 
-  // Print each requirement
-  for (const req of filtered) {
-    const color = getStatusColor(req.status);
-    const statusDisplay = `${color}${req.status}${COLORS.reset}`;
-    const updatedDate = formatDate(req.updated);
-
-    console.log(`ID: ${req.id}`);
-    console.log(`Title: ${req.title}`);
-    console.log(`Status: ${statusDisplay}`);
-    console.log(`Updated: ${updatedDate}`);
-
-    if (req.externalLink) {
-      console.log(`Link: ${req.externalLink}`);
+  switch (format) {
+    case 'json': {
+      // JSON format: output full requirement objects
+      console.log(JSON.stringify(filtered, null, 2));
+      break;
     }
 
-    if (req.notes) {
-      // Truncate notes if too long
-      const maxNotesLength = 100;
-      const notesDisplay =
-        req.notes.length > maxNotesLength
-          ? req.notes.substring(0, maxNotesLength) + '...'
-          : req.notes;
-      console.log(`Notes: ${notesDisplay}`);
+    case 'summary': {
+      // Summary format: show only counts by status
+      const summaryCounts = filtered.reduce(
+        (acc, req) => {
+          acc[req.status] = (acc[req.status] || 0) + 1;
+          return acc;
+        },
+        {} as Record<Status, number>
+      );
+
+      const summaryParts: string[] = [];
+      if (summaryCounts['Not Started']) {
+        summaryParts.push(`${summaryCounts['Not Started']} Not Started`);
+      }
+      if (summaryCounts['In Progress']) {
+        summaryParts.push(`${summaryCounts['In Progress']} In Progress`);
+      }
+      if (summaryCounts.Completed) {
+        summaryParts.push(`${summaryCounts.Completed} Completed`);
+      }
+      if (summaryCounts.Blocked) {
+        summaryParts.push(`${summaryCounts.Blocked} Blocked`);
+      }
+
+      console.log(summaryParts.join(', '));
+      break;
     }
 
-    console.log('-'.repeat(80));
-  }
+    case 'detailed': {
+      // Detailed format: include full descriptions and notes
+      console.log(`\n${'='.repeat(80)}`);
+      console.log('Requirements List (Detailed)');
+      console.log(`${'='.repeat(80)}\n`);
 
-  // Print summary
-  const statusCounts = filtered.reduce(
-    (acc, req) => {
-      acc[req.status] = (acc[req.status] || 0) + 1;
-      return acc;
-    },
-    {} as Record<Status, number>
-  );
+      for (const req of filtered) {
+        const color = getStatusColor(req.status);
+        const statusDisplay = `${color}${req.status}${COLORS.reset}`;
+        const updatedDate = formatDate(req.updated);
+        const createdDate = formatDate(req.created);
 
-  console.log('\nSummary:');
-  console.log(`Total: ${filtered.length} requirements`);
-  if (statusCounts['Not Started']) {
-    console.log(`${COLORS.gray}Not Started: ${statusCounts['Not Started']}${COLORS.reset}`);
+        console.log(`ID: ${req.id}`);
+        console.log(`Title: ${req.title}`);
+        console.log(`Status: ${statusDisplay}`);
+        console.log(`Created: ${createdDate}`);
+        console.log(`Updated: ${updatedDate}`);
+
+        if (req.externalLink) {
+          console.log(`Link: ${req.externalLink}`);
+        }
+
+        console.log(`\nDescription:\n${req.description}`);
+
+        if (req.notes) {
+          console.log(`\nNotes:\n${req.notes}`);
+        }
+
+        console.log(`\n${'='.repeat(80)}\n`);
+      }
+      break;
+    }
+
+    default: {
+      // Default format: formatted table with key info
+      console.log(`\n${'='.repeat(80)}`);
+      console.log('Requirements List');
+      console.log(`${'='.repeat(80)}\n`);
+
+      for (const req of filtered) {
+        const color = getStatusColor(req.status);
+        const statusDisplay = `${color}${req.status}${COLORS.reset}`;
+        const updatedDate = formatDate(req.updated);
+
+        console.log(`ID: ${req.id}`);
+        console.log(`Title: ${req.title}`);
+        console.log(`Status: ${statusDisplay}`);
+        console.log(`Updated: ${updatedDate}`);
+
+        if (req.externalLink) {
+          console.log(`Link: ${req.externalLink}`);
+        }
+
+        if (req.notes) {
+          // Truncate notes if too long
+          const maxNotesLength = 100;
+          const notesDisplay =
+            req.notes.length > maxNotesLength
+              ? `${req.notes.substring(0, maxNotesLength)}...`
+              : req.notes;
+          console.log(`Notes: ${notesDisplay}`);
+        }
+
+        console.log('-'.repeat(80));
+      }
+
+      // Print summary
+      const statusCounts = filtered.reduce(
+        (acc, req) => {
+          acc[req.status] = (acc[req.status] || 0) + 1;
+          return acc;
+        },
+        {} as Record<Status, number>
+      );
+
+      console.log('\nSummary:');
+      console.log(`Total: ${filtered.length} requirements`);
+      if (statusCounts['Not Started']) {
+        console.log(`${COLORS.gray}Not Started: ${statusCounts['Not Started']}${COLORS.reset}`);
+      }
+      if (statusCounts['In Progress']) {
+        console.log(`${COLORS.blue}In Progress: ${statusCounts['In Progress']}${COLORS.reset}`);
+      }
+      if (statusCounts.Completed) {
+        console.log(`${COLORS.green}Completed: ${statusCounts.Completed}${COLORS.reset}`);
+      }
+      if (statusCounts.Blocked) {
+        console.log(`${COLORS.red}Blocked: ${statusCounts.Blocked}${COLORS.reset}`);
+      }
+      console.log();
+      break;
+    }
   }
-  if (statusCounts['In Progress']) {
-    console.log(`${COLORS.blue}In Progress: ${statusCounts['In Progress']}${COLORS.reset}`);
-  }
-  if (statusCounts.Completed) {
-    console.log(`${COLORS.green}Completed: ${statusCounts.Completed}${COLORS.reset}`);
-  }
-  if (statusCounts.Blocked) {
-    console.log(`${COLORS.red}Blocked: ${statusCounts.Blocked}${COLORS.reset}`);
-  }
-  console.log();
 }
