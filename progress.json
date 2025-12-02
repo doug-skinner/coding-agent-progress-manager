@@ -183,10 +183,10 @@
     "id": 21,
     "title": "Create comprehensive agent_prompt.txt",
     "description": "Write a detailed agent_prompt.txt file with instructions for coding agents. Define the agent workflow: read progress.json → work on one requirement → update progress → commit changes. Specify the one-requirement-at-a-time rule. Explain automatic status transitions (Not Started → In Progress when starting, → Completed when done). Include examples of when to update status vs notes. Document commit strategy: make small, frequent commits to keep the repository always in a good state. Provide example progress.json update patterns and best practices",
-    "status": "Not Started",
-    "notes": "",
+    "status": "Completed",
+    "notes": "Already completed: This requirement is a duplicate of requirement #12, which created a comprehensive agent_prompt.txt with 10 major sections covering workflow, validation, edge cases, and examples. The file exists at agent_prompt.txt and is 18KB in size.",
     "created": "2025-12-01T20:00:00.000Z",
-    "updated": "2025-12-01T20:00:00.000Z"
+    "updated": "2025-12-02T14:27:53.184Z"
   },
   {
     "id": 22,
