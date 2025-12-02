@@ -1,0 +1,3 @@
+#!/usr/bin/env sh
+# Validate progress.json before commit
+node scripts/validate-progress.js
