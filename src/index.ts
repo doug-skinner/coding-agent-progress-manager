@@ -9,6 +9,7 @@ import { completeCommand } from './commands/complete.js';
 import { deleteCommand } from './commands/delete.js';
 import { initCommand } from './commands/init.js';
 import { listCommand } from './commands/list.js';
+import { promptCommand } from './commands/prompt.js';
 import { showCommand } from './commands/show.js';
 import { updateCommand } from './commands/update.js';
 
@@ -106,8 +107,13 @@ program
     await deleteCommand(id, options.force);
   });
 
-// Command placeholders - will be implemented in subsequent requirements
-// TODO: Add commands: prompt
+// Prompt command
+program
+  .command('prompt')
+  .description('Output the agent_prompt.txt file contents')
+  .action(async () => {
+    await promptCommand();
+  });
 
 // Parse command-line arguments
 program.parse(process.argv);
