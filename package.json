@@ -15,9 +15,10 @@
   ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "tsc && npm run copy-static",
     "build:watch": "tsc --watch",
     "clean": "rm -rf dist",
+    "copy-static": "mkdir -p dist/server/public && cp src/server/public/* dist/server/public/",
     "lint": "biome lint .",
     "format": "biome format --write .",
     "check": "biome check --write .",
