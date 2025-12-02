@@ -319,9 +319,9 @@
     "title": "Update existing commands to use shared validation",
     "description": "Refactor src/commands/add.ts and src/commands/update.ts to import and use validation functions from src/server/validation.ts instead of implementing validation inline. This ensures DRY principle and consistency between CLI and web UI validation.",
     "status": "In Progress",
-    "notes": "Starting refactoring of add.ts and update.ts to use shared validation module",
+    "notes": "Refactoring complete. Testing CLI commands to verify no regressions.",
     "created": "2025-12-02T17:21:23.181Z",
-    "updated": "2025-12-02T19:05:39.467Z"
+    "updated": "2025-12-02T19:06:13.380Z"
   },
   {
     "id": 37,

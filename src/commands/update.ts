@@ -1,26 +1,6 @@
 import { readProgress, writeProgress } from '../fileUtils.js';
-import type { Requirement, Status } from '../types.js';
-
-const VALID_STATUSES: Status[] = ['Not Started', 'In Progress', 'Completed', 'Blocked'];
-
-/**
- * Validate that a status value is one of the allowed values
- */
-function isValidStatus(status: string): status is Status {
-  return VALID_STATUSES.includes(status as Status);
-}
-
-/**
- * Validate that a string is a valid HTTP/HTTPS URL
- */
-function isValidUrl(urlString: string): boolean {
-  try {
-    const url = new URL(urlString);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch {
-    return false;
-  }
-}
+import type { Requirement } from '../types.js';
+import { VALID_STATUSES, isValidStatus, isValidUrl } from '../server/validation.js';
 
 /**
  * Update an existing requirement's status and optionally its notes

@@ -1,17 +1,6 @@
 import { readProgress, writeProgress } from '../fileUtils.js';
 import type { Requirement } from '../types.js';
-
-/**
- * Validate that a string is a valid HTTP/HTTPS URL
- */
-function isValidUrl(urlString: string): boolean {
-  try {
-    const url = new URL(urlString);
-    return url.protocol === 'http:' || url.protocol === 'https:';
-  } catch {
-    return false;
-  }
-}
+import { isValidUrl } from '../server/validation.js';
 
 /**
  * Add a new requirement to progress.json
