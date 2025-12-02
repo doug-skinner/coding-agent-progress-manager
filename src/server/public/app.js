@@ -566,6 +566,111 @@ async function handleAddSubmit(event) {
 }
 
 // ============================================================================
+// Edit Requirement Modal
+// ============================================================================
+
+/**
+ * Open the edit requirement modal
+ */
+async function openEditModal(id) {
+  try {
+    // Fetch requirement data
+    const requirement = await fetchRequirement(id);
+
+    const modal = document.getElementById('requirement-modal');
+
+    // Set modal title
+    document.getElementById('modal-title').textContent = 'Edit Requirement';
+
+    // Show status and notes fields (for edit mode)
+    document.getElementById('status-field').style.display = 'block';
+    document.getElementById('notes-field').style.display = 'block';
+
+    // Pre-fill form
+    document.getElementById('requirement-id').value = requirement.id;
+    document.getElementById('requirement-title').value = requirement.title;
+    document.getElementById('requirement-description').value = requirement.description;
+    document.getElementById('requirement-link').value = requirement.externalLink || '';
+    document.getElementById('requirement-status').value = requirement.status;
+    document.getElementById('requirement-notes').value = requirement.notes || '';
+
+    // Show modal
+    modal.showModal();
+  } catch (error) {
+    showError(`Failed to load requirement: ${error.message}`);
+  }
+}
+
+/**
+ * Handle edit requirement form submission
+ */
+async function handleEditSubmit(event) {
+  event.preventDefault();
+
+  const id = parseInt(document.getElementById('requirement-id').value, 10);
+  const title = document.getElementById('requirement-title').value.trim();
+  const description = document.getElementById('requirement-description').value.trim();
+  const externalLink = document.getElementById('requirement-link').value.trim();
+  const status = document.getElementById('requirement-status').value;
+  const notes = document.getElementById('requirement-notes').value.trim();
+
+  // Validate form
+  const titleValidation = validateTitle(title);
+  if (!titleValidation.valid) {
+    showError(titleValidation.error);
+    return;
+  }
+
+  const descValidation = validateDescription(description);
+  if (!descValidation.valid) {
+    showError(descValidation.error);
+    return;
+  }
+
+  const linkValidation = validateExternalLink(externalLink);
+  if (!linkValidation.valid) {
+    showError(linkValidation.error);
+    return;
+  }
+
+  if (!isValidStatus(status)) {
+    showError('Invalid status value');
+    return;
+  }
+
+  try {
+    // Create requirement data
+    const requirementData = {
+      title,
+      description,
+      status,
+      notes,
+    };
+
+    // Handle external link (empty string clears it)
+    if (externalLink === '') {
+      requirementData.externalLink = '';
+    } else if (externalLink) {
+      requirementData.externalLink = externalLink;
+    }
+
+    // Update requirement
+    await updateRequirement(id, requirementData);
+
+    // Close modal
+    closeRequirementModal();
+
+    // Show success message
+    showSuccess(`Requirement #${id} updated successfully`);
+
+    // Refresh list
+    await loadRequirements();
+  } catch (error) {
+    showError(`Failed to update requirement: ${error.message}`);
+  }
+}
+
+// ============================================================================
 // Initialization
 // ============================================================================
 
