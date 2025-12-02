@@ -32,7 +32,7 @@ export function readProgress(): Requirement[] {
     if (error instanceof Error) {
       if ('code' in error && error.code === 'ENOENT') {
         throw new Error(
-          `progress.json file not found at ${filePath}. Run 'npm run progress -- init' to create it.`,
+          `progress.json file not found at ${filePath}. Run 'npm run progress -- init' to create it.`
         );
       }
       if (error instanceof SyntaxError) {

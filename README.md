@@ -28,44 +28,406 @@ This repository is currently being dog fooded by myself as I work on various cod
 
 ## Usage
 
+### Quick Start
+
 To use this progress tracking system in your own coding agent project:
 
-1. Initialize the progress tracking file:
+1. **Initialize the progress tracking file:**
    ```bash
    cap-manager init "Initial project setup" "Set up the project structure and initial files."
    ```
 
-2. Add new requirements:
+2. **Add new requirements:**
    ```bash
    cap-manager add "Implement feature X" "Add the implementation for feature X."
    ```
 
-3. Update requirement status:
+3. **Update requirement status:**
    ```bash
    cap-manager update 1 "In Progress" "Started working on feature X."
    ```
 
-4. List all requirements:
+4. **List all requirements:**
    ```bash
    cap-manager list
    ```
 
-5. View detailed requirement info:
+5. **View detailed requirement info:**
    ```bash
    cap-manager show 1
    ```
 
-### Available Commands
+### Complete Command Reference
 
-- `cap-manager init <title> <description>` - Initialize progress.json with first requirement
-- `cap-manager add <title> <description>` - Add a new requirement
-- `cap-manager update <id> <status> [notes]` - Update requirement status and notes
-- `cap-manager list` - List all requirements
-- `cap-manager show <id>` - Show detailed information for a requirement
-- `cap-manager complete <id> [notes]` - Mark a requirement as completed
-- `cap-manager block <id> <reason>` - Mark a requirement as blocked
-- `cap-manager delete <id>` - Delete a requirement (with confirmation)
-- `cap-manager prompt` - Output the agent prompt instructions
+#### `init` - Initialize Progress Tracking
+
+Create a new progress.json file with the first requirement:
+
+```bash
+cap-manager init <title> <description>
+```
+
+**Example:**
+
+```bash
+cap-manager init "Set up TypeScript configuration" "Initialize TypeScript in the project with tsconfig.json, install necessary dependencies, and configure for Node.js CLI development"
+```
+
+**What it does:**
+
+- Creates progress.json if it doesn't exist
+- Adds the first requirement with ID 1
+- Sets status to "Not Started"
+- Records creation and update timestamps
+
+#### `add` - Add New Requirement
+
+Add a new requirement to the existing progress.json:
+
+```bash
+cap-manager add <title> <description>
+```
+
+**Examples:**
+
+```bash
+# Add a feature requirement
+cap-manager add "Implement user authentication" "Add JWT-based authentication with login and logout endpoints"
+
+# Add a bug fix requirement
+cap-manager add "Fix memory leak in data processing" "Investigate and resolve memory leak occurring during large file processing operations"
+
+# Add a documentation requirement
+cap-manager add "Update API documentation" "Document all REST endpoints with request/response examples and error codes"
+```
+
+**What it does:**
+
+- Reads existing progress.json
+- Assigns next sequential ID
+- Creates requirement with "Not Started" status
+- Saves with current timestamps
+
+#### `update` - Update Requirement Status
+
+Update a requirement's status and optionally add notes:
+
+```bash
+cap-manager update <id> <status> [notes]
+```
+
+**Valid status values:** `"Not Started"`, `"In Progress"`, `"Completed"`, `"Blocked"`
+
+**Examples:**
+
+```bash
+# Start working on a requirement
+cap-manager update 5 "In Progress" "Beginning implementation of file I/O utilities"
+
+# Mark as completed with summary
+cap-manager update 5 "Completed" "Implemented readFile and writeFile utilities with comprehensive error handling"
+
+# Update progress mid-work
+cap-manager update 8 "In Progress" "Completed database schema design, now working on migration scripts"
+
+# Update status without notes
+cap-manager update 3 "In Progress"
+```
+
+**What it does:**
+
+- Validates the status value
+- Updates the requirement's status field
+- Updates notes if provided
+- Sets new updated timestamp
+
+#### `complete` - Mark as Completed (Shorthand)
+
+Convenient shorthand for marking a requirement as completed:
+
+```bash
+cap-manager complete <id> [notes]
+```
+
+**Examples:**
+
+```bash
+# Complete with summary
+cap-manager complete 12 "All endpoints implemented and tested with Postman collection"
+
+# Complete without notes
+cap-manager complete 7
+```
+
+**What it does:**
+
+- Shorthand for `update <id> "Completed" [notes]`
+- Sets status to "Completed"
+- Optionally adds completion notes
+- Updates timestamp
+
+#### `block` - Mark as Blocked (Shorthand)
+
+Mark a requirement as blocked with a required reason:
+
+```bash
+cap-manager block <id> <reason>
+```
+
+**Examples:**
+
+```bash
+# Block due to missing information
+cap-manager block 15 "Waiting for API credentials from DevOps team"
+
+# Block due to dependency
+cap-manager block 8 "Blocked until requirement #3 (database setup) is completed"
+
+# Block due to external issue
+cap-manager block 22 "Cannot proceed - third-party library has critical bug in v2.1.0, waiting for patch release"
+```
+
+**What it does:**
+
+- Shorthand for `update <id> "Blocked" <reason>`
+- Sets status to "Blocked"
+- Stores reason in notes field (required)
+- Updates timestamp
+
+#### `list` - List All Requirements
+
+Display all requirements with their current status:
+
+```bash
+cap-manager list
+```
+
+**Example output:**
+
+```text
+================================================================================
+Requirements List
+================================================================================
+
+ID: 1
+Title: Set up TypeScript configuration
+Status: Completed
+Updated: Dec 1, 2025
+Notes: Completed implementation: Installed TypeScript and @types/node as dev dependencies...
+--------------------------------------------------------------------------------
+ID: 2
+Title: Implement user authentication
+Status: In Progress
+Updated: Dec 2, 2025
+Notes: Completed login endpoint, working on logout functionality...
+--------------------------------------------------------------------------------
+ID: 3
+Title: Add unit tests
+Status: Not Started
+Updated: Dec 1, 2025
+--------------------------------------------------------------------------------
+
+Summary:
+Total: 3 requirements
+Not Started: 1
+In Progress: 1
+Completed: 1
+```
+
+**What it displays:**
+
+- ID, title, status (color-coded), updated date
+- Truncated notes preview
+- Summary with counts by status
+
+#### `show` - Show Requirement Details
+
+Display detailed information for a single requirement:
+
+```bash
+cap-manager show <id>
+```
+
+**Examples:**
+```bash
+# View requirement details
+cap-manager show 5
+
+# View a blocked requirement to see blocker reason
+cap-manager show 15
+```
+
+**Example output:**
+```
+================================================================================
+Requirement #5
+================================================================================
+
+Title: Implement file I/O utilities for progress.json
+Status: Completed
+
+Created: Dec 1, 2025 at 19:45:29
+Updated: Dec 1, 2025 at 21:04:00
+
+Description:
+Create utility functions to read and write the progress.json file safely,
+including error handling for missing files, parsing errors, and write failures.
+Handle JSON serialization with proper formatting
+
+Notes:
+Completed implementation: Created src/fileUtils.ts with readProgress(),
+writeProgress(), and progressFileExists() functions. Includes comprehensive
+error handling for missing files (ENOENT), JSON parsing errors, and write
+failures. JSON serialization uses proper formatting (2-space indent, trailing
+newline).
+```
+
+**What it displays:**
+- Full requirement details
+- All fields including complete description and notes
+- Formatted timestamps with date and time
+- External link if present
+
+#### `delete` - Delete Requirement
+
+Delete a requirement by ID:
+
+```bash
+cap-manager delete <id>
+cap-manager delete <id> --force
+cap-manager delete <id> -f
+```
+
+**Examples:**
+```bash
+# Delete with confirmation prompt
+cap-manager delete 10
+
+# Delete without confirmation (use with caution)
+cap-manager delete 10 --force
+cap-manager delete 10 -f
+```
+
+**Example interactive prompt:**
+```
+You are about to delete requirement #10:
+
+Title: Add logging functionality
+Status: Not Started
+
+Are you sure you want to delete this requirement? (y/N): y
+
+Requirement #10 deleted successfully
+```
+
+**What it does:**
+- Shows requirement details
+- Prompts for confirmation (unless --force flag used)
+- Removes requirement from progress.json
+- Note: Does not renumber remaining IDs
+
+#### `prompt` - Output Agent Instructions
+
+Output the complete contents of agent_prompt.txt:
+
+```bash
+cap-manager prompt
+```
+
+**Example usage:**
+```bash
+# View the prompt instructions
+cap-manager prompt
+
+# Copy to clipboard (macOS)
+cap-manager prompt | pbcopy
+
+# Copy to clipboard (Linux with xclip)
+cap-manager prompt | xclip -selection clipboard
+
+# Save to a file
+cap-manager prompt > my_agent_instructions.txt
+```
+
+**What it does:**
+- Outputs the full agent_prompt.txt file contents
+- Useful for piping to other tools or copying instructions
+- No additional formatting or modifications
+
+### Realistic Workflow Examples
+
+#### Example 1: Starting a New Project
+
+```bash
+# Initialize with first requirement
+cap-manager init "Set up project structure" "Create directory structure, initialize npm, and set up basic configuration files"
+
+# Add several requirements
+cap-manager add "Configure TypeScript" "Install TypeScript, create tsconfig.json with appropriate settings for Node.js development"
+cap-manager add "Set up testing framework" "Install Jest and configure for TypeScript, create sample test"
+cap-manager add "Implement core functionality" "Build the main application logic with proper error handling"
+
+# View all requirements
+cap-manager list
+```
+
+#### Example 2: Working Through Requirements
+
+```bash
+# Start working on first requirement
+cap-manager update 1 "In Progress" "Creating directory structure"
+
+# Complete it
+cap-manager complete 1 "Created src/, dist/, and tests/ directories. Initialized npm with package.json"
+
+# Move to next requirement
+cap-manager update 2 "In Progress" "Installing TypeScript dependencies"
+
+# Add progress notes during work
+cap-manager update 2 "In Progress" "TypeScript installed, now configuring tsconfig.json"
+
+# Complete it
+cap-manager complete 2 "TypeScript configured with ES2020 target, strict mode enabled"
+```
+
+#### Example 3: Handling Blockers
+
+```bash
+# Start working on requirement
+cap-manager update 5 "In Progress" "Beginning API integration"
+
+# Discover you're blocked
+cap-manager block 5 "Need API credentials and endpoint documentation from backend team"
+
+# Later, when unblocked, resume work
+cap-manager update 5 "In Progress" "Received credentials, resuming API integration work"
+
+# Complete it
+cap-manager complete 5 "API integration complete with error handling and retry logic"
+```
+
+#### Example 4: Reviewing Progress
+
+```bash
+# See high-level overview
+cap-manager list
+
+# Check specific requirement details
+cap-manager show 8
+
+# Get detailed info on a blocked requirement
+cap-manager show 5
+```
+
+#### Example 5: Cleaning Up
+
+```bash
+# Made a mistake? Delete a requirement
+cap-manager delete 10
+
+# Or force delete without confirmation
+cap-manager delete 10 --force
+```
 
 ### For Development or Local Usage
 

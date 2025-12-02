@@ -94,7 +94,7 @@ export async function listCommand(): Promise<void> {
       acc[req.status] = (acc[req.status] || 0) + 1;
       return acc;
     },
-    {} as Record<Status, number>,
+    {} as Record<Status, number>
   );
 
   console.log('\nSummary:');

@@ -13,11 +13,7 @@ function isValidStatus(status: string): status is Status {
 /**
  * Update an existing requirement's status and optionally its notes
  */
-export async function updateCommand(
-  id: number,
-  newStatus: string,
-  notes?: string,
-): Promise<void> {
+export async function updateCommand(id: number, newStatus: string, notes?: string): Promise<void> {
   // Validate status
   if (!isValidStatus(newStatus)) {
     console.error(`Error: Invalid status "${newStatus}"`);

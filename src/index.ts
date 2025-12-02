@@ -21,7 +21,9 @@ const program = new Command();
 
 program
   .name('cap-manager')
-  .description('CLI tool for tracking lightweight requirements and progress across coding agent runs')
+  .description(
+    'CLI tool for tracking lightweight requirements and progress across coding agent runs'
+  )
   .version(packageJson.version);
 
 // Init command
