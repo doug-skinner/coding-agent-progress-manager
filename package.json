@@ -55,6 +55,9 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "commander": "^14.0.2"
+    "@types/express": "^5.0.6",
+    "commander": "^14.0.2",
+    "express": "^5.2.1",
+    "open": "^11.0.0"
   }
 }
