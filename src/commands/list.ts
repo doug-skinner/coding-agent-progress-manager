@@ -47,6 +47,8 @@ export interface ListOptions {
   until?: string;
   linked?: boolean;
   unlinked?: boolean;
+  sort?: 'id' | 'updated' | 'created' | 'status';
+  order?: 'asc' | 'desc';
 }
 
 /**
@@ -98,6 +100,31 @@ export async function listCommand(options: ListOptions = {}): Promise<void> {
   if (options.unlinked) {
     filtered = filtered.filter((req) => req.externalLink === undefined);
   }
+
+  // Apply sorting
+  const sortBy = options.sort || 'id';
+  const order = options.order || 'asc';
+
+  filtered.sort((a, b) => {
+    let comparison = 0;
+
+    switch (sortBy) {
+      case 'id':
+        comparison = a.id - b.id;
+        break;
+      case 'updated':
+        comparison = new Date(a.updated).getTime() - new Date(b.updated).getTime();
+        break;
+      case 'created':
+        comparison = new Date(a.created).getTime() - new Date(b.created).getTime();
+        break;
+      case 'status':
+        comparison = a.status.localeCompare(b.status);
+        break;
+    }
+
+    return order === 'desc' ? -comparison : comparison;
+  });
 
   if (filtered.length === 0) {
     console.log('No requirements match the specified filters.');

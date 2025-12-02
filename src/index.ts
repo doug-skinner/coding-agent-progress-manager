@@ -69,7 +69,17 @@ program
   .option('--until <date>', 'Filter by updated date (before)')
   .option('--linked', 'Show only requirements with external links')
   .option('--unlinked', 'Show only requirements without external links')
-  .action(async (options: { status?: string; since?: string; until?: string; linked?: boolean; unlinked?: boolean }) => {
+  .option('--sort <field>', 'Sort by: id, updated, created, or status (default: id)')
+  .option('--order <direction>', 'Sort order: asc or desc (default: asc)')
+  .action(async (options: {
+    status?: string;
+    since?: string;
+    until?: string;
+    linked?: boolean;
+    unlinked?: boolean;
+    sort?: 'id' | 'updated' | 'created' | 'status';
+    order?: 'asc' | 'desc';
+  }) => {
     await listCommand(options);
   });
 
