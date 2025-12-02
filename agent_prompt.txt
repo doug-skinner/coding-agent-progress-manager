@@ -414,6 +414,42 @@ Only these four values are allowed:
 
 Any other value will cause an error.
 
+### Web UI (Optional)
+
+A web-based UI is available for managing requirements through a browser interface:
+
+```bash
+cap-manager serve [--port <number>]
+```
+
+**When to use the Web UI:**
+- **NOT for automated workflows** - CLI commands are the primary interface for coding agents
+- **For human interaction** - When a human developer wants to browse, filter, or manage requirements visually
+- **For project planning** - When organizing and reviewing many requirements at once
+
+**Web UI Features:**
+- Browse all requirements with color-coded status badges
+- Filter by status, date range, or external link presence
+- Sort by ID, updated date, created date, or status
+- Create, edit, update, and delete requirements with forms and validation
+- Automatic session timeout after 15 minutes of inactivity
+
+**Important Notes:**
+- The web UI is **optional** and designed for human use
+- **Coding agents should continue using CLI commands** for all automated workflows
+- CLI commands remain the primary, recommended interface for agents
+- The serve command is documented for awareness, but agents should not typically use it
+- If a human user wants to use the web UI, they can launch it themselves
+
+**Example (human use):**
+```bash
+# Human developer launches web UI to review requirements
+cap-manager serve
+
+# Browser opens automatically to http://localhost:3005
+# Human can browse, filter, and manage requirements visually
+```
+
 ---
 
 ## 8. EDGE CASE HANDLING
