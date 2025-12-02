@@ -295,5 +295,185 @@
     "notes": "Completed NPM publishing setup: Created GitHub Actions workflow for publishing on version tags, updated all documentation to reference cap-manager command. Package is ready to publish to NPM (requires NPM_TOKEN secret in GitHub).",
     "created": "2025-12-01T21:30:00.000Z",
     "updated": "2025-12-02T16:48:56.512Z"
+  },
+  {
+    "id": 34,
+    "title": "Install web server dependencies",
+    "description": "Install Express.js, @types/express, and open npm packages as dependencies. Express will be the HTTP server framework, @types/express provides TypeScript type definitions, and open enables automatic browser launching.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:22.774Z",
+    "updated": "2025-12-02T17:21:22.774Z"
+  },
+  {
+    "id": 35,
+    "title": "Create shared validation module",
+    "description": "Extract validation logic from src/commands/add.ts and src/commands/update.ts into a new src/server/validation.ts module. Include functions: isValidStatus, validateTitle, validateDescription, validateExternalLink, validateDateString. This will be shared between CLI commands and web API endpoints to ensure consistent validation rules.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:22.997Z",
+    "updated": "2025-12-02T17:21:22.997Z"
+  },
+  {
+    "id": 36,
+    "title": "Update existing commands to use shared validation",
+    "description": "Refactor src/commands/add.ts and src/commands/update.ts to import and use validation functions from src/server/validation.ts instead of implementing validation inline. This ensures DRY principle and consistency between CLI and web UI validation.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:23.181Z",
+    "updated": "2025-12-02T17:21:23.181Z"
+  },
+  {
+    "id": 37,
+    "title": "Create Express server setup",
+    "description": "Create src/server/server.ts with Express application configuration. Include: JSON body parsing middleware, static file serving from public/ directory, CORS headers for localhost, error handling middleware, and health check endpoint. Export server setup function for use by serve command.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:23.345Z",
+    "updated": "2025-12-02T17:21:23.345Z"
+  },
+  {
+    "id": 38,
+    "title": "Implement REST API routes module",
+    "description": "Create src/server/routes.ts with all REST API endpoints: GET /api/requirements (with filtering and sorting), GET /api/requirements/:id, POST /api/requirements, PUT /api/requirements/:id, DELETE /api/requirements/:id, GET /api/health. Use existing fileUtils.ts for file I/O and validation.ts for input validation. Return consistent JSON response format with success/error/data/message fields.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:23.523Z",
+    "updated": "2025-12-02T17:21:23.523Z"
+  },
+  {
+    "id": 39,
+    "title": "Create serve command with session management",
+    "description": "Create src/commands/serve.ts that starts Express server on configurable port (default 3005), opens browser automatically using open package, and implements ping-based session management (15 minute timeout). Includes graceful shutdown on Ctrl+C and checks for progress.json existence before starting.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:23.690Z",
+    "updated": "2025-12-02T17:21:23.690Z"
+  },
+  {
+    "id": 40,
+    "title": "Register serve command in CLI",
+    "description": "Register the serve command in src/index.ts with Commander.js. Include --port (-p) option to specify custom port (default 3005). Command should be invoked as: cap-manager serve or cap-manager serve --port 8080.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:23.856Z",
+    "updated": "2025-12-02T17:21:23.856Z"
+  },
+  {
+    "id": 41,
+    "title": "Create HTML structure with Pico.css",
+    "description": "Create src/server/public/index.html with complete UI structure including: header with title and status summary, filters/sorting controls, requirements list container, add/edit modal, delete confirmation modal, error/success message containers. Link Pico.css from CDN for styling.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:24.032Z",
+    "updated": "2025-12-02T17:21:24.032Z"
+  },
+  {
+    "id": 42,
+    "title": "Create custom CSS styles",
+    "description": "Create src/server/public/styles.css with custom styles for status badges (color-coded by status), requirement cards, modals, error/success messages, and responsive design. Pico.css handles base styling, custom CSS only for app-specific components.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:24.208Z",
+    "updated": "2025-12-02T17:21:24.208Z"
+  },
+  {
+    "id": 43,
+    "title": "Implement frontend JavaScript API client",
+    "description": "Create src/server/public/app.js with API client functions for all endpoints, client-side validation matching server validation, error handling, and health ping mechanism (30 second interval). Include utility functions for formatting dates, escaping HTML, and showing error/success messages.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:24.344Z",
+    "updated": "2025-12-02T17:21:24.344Z"
+  },
+  {
+    "id": 44,
+    "title": "Implement requirements list rendering",
+    "description": "Add JavaScript functions to fetch requirements from API, apply filters and sorting based on UI controls, render requirement cards with all details, handle empty state, and update status summary badges. Include click handlers for edit/delete buttons.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:24.504Z",
+    "updated": "2025-12-02T17:21:24.504Z"
+  },
+  {
+    "id": 45,
+    "title": "Implement add requirement modal",
+    "description": "Add JavaScript functions to open/close add modal, handle form submission with client-side validation, make POST request to create requirement, refresh list on success, and display error/success messages. Clear form on cancel.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:24.684Z",
+    "updated": "2025-12-02T17:21:24.684Z"
+  },
+  {
+    "id": 46,
+    "title": "Implement edit requirement modal",
+    "description": "Add JavaScript functions to open edit modal with pre-filled data, show additional fields (status, notes), handle form submission with validation, make PUT request to update requirement, refresh list on success, and display messages.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:24.882Z",
+    "updated": "2025-12-02T17:21:24.882Z"
+  },
+  {
+    "id": 47,
+    "title": "Implement delete confirmation modal",
+    "description": "Add JavaScript functions to open delete modal with requirement details, handle confirmation click, make DELETE request, refresh list on success, and display success message. Handle cancel action.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:25.076Z",
+    "updated": "2025-12-02T17:21:25.076Z"
+  },
+  {
+    "id": 48,
+    "title": "Implement filters and sorting controls",
+    "description": "Add JavaScript event listeners for filter controls (status, date range, linked/unlinked) and sorting controls (sort by, order). Apply filters/sorting when changed and refresh requirements list. Implement clear filters button to reset all controls.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:25.263Z",
+    "updated": "2025-12-02T17:21:25.263Z"
+  },
+  {
+    "id": 49,
+    "title": "Implement manual refresh functionality",
+    "description": "Add event listener for refresh button that re-fetches requirements from API and updates the UI. Show loading indicator during fetch. This provides manual refresh capability (no real-time updates needed per requirements).",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:25.447Z",
+    "updated": "2025-12-02T17:21:25.447Z"
+  },
+  {
+    "id": 50,
+    "title": "Update build process to copy static files",
+    "description": "Update package.json build scripts to copy static files (HTML, CSS, JS) from src/server/public/ to dist/server/public/ after TypeScript compilation. Add copy-static script: 'mkdir -p dist/server/public && cp src/server/public/* dist/server/public/'. Update main build script to run: 'tsc && npm run copy-static'.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:25.644Z",
+    "updated": "2025-12-02T17:21:25.644Z"
+  },
+  {
+    "id": 51,
+    "title": "Test web UI end-to-end",
+    "description": "Perform comprehensive end-to-end testing of web UI: test all CRUD operations (create, read, update, delete), test validation (client and server), test filters and sorting, test error scenarios (missing file, invalid data), test session timeout, test port configuration, verify responsive design on mobile. Document any issues found.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:25.795Z",
+    "updated": "2025-12-02T17:21:25.795Z"
+  },
+  {
+    "id": 52,
+    "title": "Update README with serve command documentation",
+    "description": "Add comprehensive documentation to README.md for the new serve command. Include: command syntax, port configuration, browser behavior, session timeout explanation, UI feature overview, and usage examples. Add screenshots if helpful.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:25.998Z",
+    "updated": "2025-12-02T17:21:25.998Z"
+  },
+  {
+    "id": 53,
+    "title": "Update agent_prompt.txt for web UI awareness",
+    "description": "Update agent_prompt.txt to inform coding agents about the new web UI capability. Agents should know they can use either CLI commands or the web UI (cap-manager serve) to manage requirements. Note that web UI is optional and CLI remains the primary interface for automated workflows.",
+    "status": "Not Started",
+    "notes": "",
+    "created": "2025-12-02T17:21:26.191Z",
+    "updated": "2025-12-02T17:21:26.191Z"
   }
 ]
