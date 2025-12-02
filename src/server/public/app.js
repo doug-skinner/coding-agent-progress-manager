@@ -774,6 +774,35 @@ document.addEventListener('DOMContentLoaded', () => {
     loadRequirements();
   });
 
+  // Set up auto-apply on filter/sort control changes
+  document.getElementById('filter-status').addEventListener('change', () => {
+    loadRequirements();
+  });
+
+  document.getElementById('filter-since').addEventListener('change', () => {
+    loadRequirements();
+  });
+
+  document.getElementById('filter-until').addEventListener('change', () => {
+    loadRequirements();
+  });
+
+  document.getElementById('filter-linked').addEventListener('change', () => {
+    loadRequirements();
+  });
+
+  document.getElementById('filter-unlinked').addEventListener('change', () => {
+    loadRequirements();
+  });
+
+  document.getElementById('sort-by').addEventListener('change', () => {
+    loadRequirements();
+  });
+
+  document.getElementById('sort-order').addEventListener('change', () => {
+    loadRequirements();
+  });
+
   // Set up add requirement button
   document.getElementById('add-requirement-btn').addEventListener('click', () => {
     openAddModal();
