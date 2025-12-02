@@ -469,6 +469,103 @@ function updateStatusSummary(requirements) {
 }
 
 // ============================================================================
+// Add Requirement Modal
+// ============================================================================
+
+/**
+ * Open the add requirement modal
+ */
+function openAddModal() {
+  const modal = document.getElementById('requirement-modal');
+  const form = document.getElementById('requirement-form');
+
+  // Set modal title
+  document.getElementById('modal-title').textContent = 'Add Requirement';
+
+  // Hide status and notes fields (only for edit mode)
+  document.getElementById('status-field').style.display = 'none';
+  document.getElementById('notes-field').style.display = 'none';
+
+  // Clear form
+  form.reset();
+  document.getElementById('requirement-id').value = '';
+
+  // Show modal
+  modal.showModal();
+}
+
+/**
+ * Close the requirement modal
+ */
+function closeRequirementModal() {
+  const modal = document.getElementById('requirement-modal');
+  const form = document.getElementById('requirement-form');
+
+  // Clear form
+  form.reset();
+  document.getElementById('requirement-id').value = '';
+
+  // Close modal
+  modal.close();
+}
+
+/**
+ * Handle add requirement form submission
+ */
+async function handleAddSubmit(event) {
+  event.preventDefault();
+
+  const title = document.getElementById('requirement-title').value.trim();
+  const description = document.getElementById('requirement-description').value.trim();
+  const externalLink = document.getElementById('requirement-link').value.trim();
+
+  // Validate form
+  const titleValidation = validateTitle(title);
+  if (!titleValidation.valid) {
+    showError(titleValidation.error);
+    return;
+  }
+
+  const descValidation = validateDescription(description);
+  if (!descValidation.valid) {
+    showError(descValidation.error);
+    return;
+  }
+
+  const linkValidation = validateExternalLink(externalLink);
+  if (!linkValidation.valid) {
+    showError(linkValidation.error);
+    return;
+  }
+
+  try {
+    // Create requirement data
+    const requirementData = {
+      title,
+      description,
+    };
+
+    if (externalLink) {
+      requirementData.externalLink = externalLink;
+    }
+
+    // Create requirement
+    const newRequirement = await createRequirement(requirementData);
+
+    // Close modal
+    closeRequirementModal();
+
+    // Show success message
+    showSuccess(`Requirement #${newRequirement.id} created successfully`);
+
+    // Refresh list
+    await loadRequirements();
+  } catch (error) {
+    showError(`Failed to create requirement: ${error.message}`);
+  }
+}
+
+// ============================================================================
 // Initialization
 // ============================================================================
 
@@ -500,5 +597,29 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('sort-by').value = 'id';
     document.getElementById('sort-order').value = 'asc';
     loadRequirements();
+  });
+
+  // Set up add requirement button
+  document.getElementById('add-requirement-btn').addEventListener('click', () => {
+    openAddModal();
+  });
+
+  // Set up modal close buttons
+  document.getElementById('close-modal-btn').addEventListener('click', () => {
+    closeRequirementModal();
+  });
+
+  document.getElementById('cancel-modal-btn').addEventListener('click', () => {
+    closeRequirementModal();
+  });
+
+  // Set up form submission - check if it's add or edit based on ID field
+  document.getElementById('requirement-form').addEventListener('submit', async (event) => {
+    const id = document.getElementById('requirement-id').value;
+    if (id) {
+      await handleEditSubmit(event);
+    } else {
+      await handleAddSubmit(event);
+    }
   });
 });
