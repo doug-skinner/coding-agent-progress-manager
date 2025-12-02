@@ -1,2 +1,31 @@
+# Dependencies
 node_modules/
+
+# Build output
 dist/
+build/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+
+# Temporary files
+tmp/
+temp/
+
+# IMPORTANT: progress.json should be committed to version control
+# This file tracks requirements and progress across coding agent runs
+# and is meant to be shared across the team and with version control.
+# Do NOT add progress.json to .gitignore
