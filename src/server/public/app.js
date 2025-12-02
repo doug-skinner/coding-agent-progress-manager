@@ -671,6 +671,76 @@ async function handleEditSubmit(event) {
 }
 
 // ============================================================================
+// Delete Confirmation Modal
+// ============================================================================
+
+let deleteRequirementId = null;
+
+/**
+ * Open the delete confirmation modal
+ */
+async function openDeleteModal(id) {
+  try {
+    // Fetch requirement data
+    const requirement = await fetchRequirement(id);
+
+    deleteRequirementId = id;
+
+    const modal = document.getElementById('delete-modal');
+    const detailsEl = document.getElementById('delete-requirement-details');
+
+    // Show requirement details
+    detailsEl.innerHTML = `
+      <strong>ID:</strong> #${requirement.id}<br>
+      <strong>Title:</strong> ${escapeHtml(requirement.title)}<br>
+      <strong>Status:</strong> ${escapeHtml(requirement.status)}
+    `;
+
+    // Show modal
+    modal.showModal();
+  } catch (error) {
+    showError(`Failed to load requirement: ${error.message}`);
+  }
+}
+
+/**
+ * Close the delete confirmation modal
+ */
+function closeDeleteModal() {
+  const modal = document.getElementById('delete-modal');
+  deleteRequirementId = null;
+  modal.close();
+}
+
+/**
+ * Handle delete confirmation
+ */
+async function handleDeleteConfirm() {
+  if (!deleteRequirementId) {
+    showError('No requirement selected for deletion');
+    return;
+  }
+
+  try {
+    // Delete requirement
+    await deleteRequirement(deleteRequirementId);
+
+    const id = deleteRequirementId;
+
+    // Close modal
+    closeDeleteModal();
+
+    // Show success message
+    showSuccess(`Requirement #${id} deleted successfully`);
+
+    // Refresh list
+    await loadRequirements();
+  } catch (error) {
+    showError(`Failed to delete requirement: ${error.message}`);
+  }
+}
+
+// ============================================================================
 // Initialization
 // ============================================================================
 
@@ -726,5 +796,18 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       await handleAddSubmit(event);
     }
+  });
+
+  // Set up delete modal close buttons
+  document.getElementById('close-delete-modal-btn').addEventListener('click', () => {
+    closeDeleteModal();
+  });
+
+  document.getElementById('cancel-delete-btn').addEventListener('click', () => {
+    closeDeleteModal();
+  });
+
+  document.getElementById('confirm-delete-btn').addEventListener('click', async () => {
+    await handleDeleteConfirm();
   });
 });
