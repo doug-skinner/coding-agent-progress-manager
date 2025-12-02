@@ -291,9 +291,9 @@
     "id": 33,
     "title": "Add NPM publishing capabilities with GitHub Actions",
     "description": "Configure package.json for NPM publishing as @dougskinner/coding-agent-progress-manager with cap-manager CLI command. Create GitHub Actions workflow to publish on Git tag push (v*). Update README and agent_prompt.txt to reference cap-manager instead of npm run progress. Requires NPM_TOKEN secret in GitHub and full CLI implementation (requirements 6-11, 14-20, 31-32).",
-    "status": "In Progress",
-    "notes": "All CLI commands are now complete (requirements 6-11, 14-20, 31-32). Ready to implement NPM publishing with GitHub Actions.",
+    "status": "Completed",
+    "notes": "Completed NPM publishing setup: Created GitHub Actions workflow for publishing on version tags, updated all documentation to reference cap-manager command. Package is ready to publish to NPM (requires NPM_TOKEN secret in GitHub).",
     "created": "2025-12-01T21:30:00.000Z",
-    "updated": "2025-12-02T16:38:25.094Z"
+    "updated": "2025-12-02T16:48:56.512Z"
   }
 ]
