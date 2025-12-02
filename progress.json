@@ -156,10 +156,10 @@
     "id": 18,
     "title": "Add external link support to schema",
     "description": "Update the TypeScript types and JSON schema to include an optional 'externalLink' field on the Requirement type. This field supports URLs to external project management systems like Jira, GitHub Issues, Linear, etc. Update all file I/O utilities to handle this new field. Display the link in 'show' and 'list' commands when present",
-    "status": "In Progress",
-    "notes": "Starting work on adding external link support to TypeScript types and schema",
+    "status": "Completed",
+    "notes": "Completed implementation: Verified TypeScript types already include optional externalLink field. Confirmed file I/O utilities handle the field automatically through JSON serialization. Verified show command already displays external links. Added external link display to list command. All components now support the externalLink field.",
     "created": "2025-12-01T20:00:00.000Z",
-    "updated": "2025-12-02T14:10:14.352Z"
+    "updated": "2025-12-02T14:11:11.618Z"
   },
   {
     "id": 19,
