@@ -431,12 +431,15 @@ cap-manager delete 10 --force
 
 ### For Development or Local Usage
 
-If you're contributing to this project or want to use it locally without global install:
+If you're contributing to this project or want to use it locally without global install, you can use the `npm run progress --` script which runs the local build:
 
 ```bash
 npm install
+npm run build
 npm run progress -- <command>
 ```
+
+Note: After globally installing the package, use `cap-manager` instead of `npm run progress --`.
 
 ## Progress File Format
 
@@ -585,6 +588,9 @@ This means you should commit even incomplete features, as long as they don't bre
 
    ```bash
    npm run progress -- <command>
+   # Or globally install and use cap-manager directly:
+   npm install -g .
+   cap-manager <command>
    ```
 
 ### Building and Testing

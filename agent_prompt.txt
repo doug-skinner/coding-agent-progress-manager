@@ -448,7 +448,7 @@ Any other value will cause an error.
 3. Ask clarifying questions: "Could you clarify: <specific questions>?"
 4. If user wants you to update the requirement description, use:
    ```bash
-   npm run progress -- update <id> "Not Started" "<user's clarified description>"
+   cap-manager update <id> "Not Started" "<user's clarified description>"
    ```
 5. Only proceed once you have clarity
 
