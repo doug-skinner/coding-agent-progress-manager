@@ -475,5 +475,14 @@
     "notes": "Added Web UI section to agent_prompt.txt in CLI Command Reference. Documents cap-manager serve command, explains it's for human interaction (NOT automated workflows), lists features, and emphasizes CLI remains primary interface for coding agents. Clear guidance that web UI is optional.",
     "created": "2025-12-02T17:21:26.191Z",
     "updated": "2025-12-02T22:53:59.886Z"
+  },
+  {
+    "id": 54,
+    "title": "Allow running init without the first requirement",
+    "description": "I want to be able to run the init command without passing in a requirement title or description, and have the file be created but empty, so I can make use of the web server to add all requirements including the first one.",
+    "status": "In Progress",
+    "notes": "Starting work on making init command arguments optional",
+    "created": "2025-12-06T15:12:06.698Z",
+    "updated": "2025-12-06T15:14:43.496Z"
   }
 ]
