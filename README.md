@@ -34,7 +34,11 @@ To use this progress tracking system in your own coding agent project:
 
 1. **Initialize the progress tracking file:**
    ```bash
+   # Option 1: Initialize with first requirement
    cap-manager init "Initial project setup" "Set up the project structure and initial files."
+
+   # Option 2: Initialize empty (useful for web UI)
+   cap-manager init
    ```
 
 2. **Add new requirements:**
@@ -61,24 +65,27 @@ To use this progress tracking system in your own coding agent project:
 
 #### `init` - Initialize Progress Tracking
 
-Create a new progress.json file with the first requirement:
+Create a new progress.json file with optional first requirement:
 
 ```bash
-cap-manager init <title> <description>
+cap-manager init [title] [description]
 ```
 
-**Example:**
+**Examples:**
 
 ```bash
+# Initialize with empty progress.json (for use with web UI)
+cap-manager init
+
+# Initialize with first requirement
 cap-manager init "Set up TypeScript configuration" "Initialize TypeScript in the project with tsconfig.json, install necessary dependencies, and configure for Node.js CLI development"
 ```
 
 **What it does:**
 
 - Creates progress.json if it doesn't exist
-- Adds the first requirement with ID 1
-- Sets status to "Not Started"
-- Records creation and update timestamps
+- If title and description provided: Adds the first requirement with ID 1, status "Not Started", and timestamps
+- If no arguments provided: Creates an empty progress.json file (useful when you want to add all requirements via web UI)
 
 #### `add` - Add New Requirement
 
