@@ -480,9 +480,9 @@
     "id": 54,
     "title": "Allow running init without the first requirement",
     "description": "I want to be able to run the init command without passing in a requirement title or description, and have the file be created but empty, so I can make use of the web server to add all requirements including the first one.",
-    "status": "In Progress",
-    "notes": "Starting work on making init command arguments optional",
+    "status": "Completed",
+    "notes": "Completed implementation: Modified init command to make title and description arguments optional. When called without arguments, creates empty progress.json file. When called with arguments, behaves as before creating first requirement. Updated README documentation to reflect this new capability.",
     "created": "2025-12-06T15:12:06.698Z",
-    "updated": "2025-12-06T15:14:43.496Z"
+    "updated": "2025-12-06T15:16:56.702Z"
   }
 ]
