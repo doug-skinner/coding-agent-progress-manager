@@ -31,10 +31,10 @@ program
 // Init command
 program
   .command('init')
-  .description('Initialize a new progress.json file with the first requirement')
-  .argument('<title>', 'Title of the first requirement')
-  .argument('<description>', 'Description of the first requirement')
-  .action(async (title: string, description: string) => {
+  .description('Initialize a new progress.json file with optional first requirement')
+  .argument('[title]', 'Title of the first requirement (optional)')
+  .argument('[description]', 'Description of the first requirement (optional)')
+  .action(async (title?: string, description?: string) => {
     await initCommand(title, description);
   });
 
